@@ -126,6 +126,22 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								</div>
 							</div>
 
+							<div class="alert alert-info">
+                    						{{Obligatoire pour que cela fonctionne.}}
+                					</div>
+                					<div class="form-group">
+                    						<label class="col-lg-3 control-label">{{Code INSEE}}</label>
+                    							<div class="col-sm-2">
+                        						<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="codeInseeCommune" placeholder="{{Code INSEE}}"/>
+                    							</div>
+                					</div>
+							<div class="form-group">
+                    						<label class="col-lg-3 control-label">{{Type}}</label>
+                    							<div class="col-sm-2">
+                        						<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="typeInfo" placeholder="{{Type}}"/>
+                    							</div>
+                					</div>
+							
 							<legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
 							<div class="form-group">
 								<label class="col-sm-4 control-label">{{Nom du paramètre n°1}}
