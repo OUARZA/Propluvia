@@ -41,9 +41,31 @@ class propluvia extends eqLogic {
   /*     * ***********************Methode static*************************** */
 
   /*
-  * Fonction exécutée automatiquement toutes les minutes par Jeedom
-  public static function cron() {}
-  */
+  * Fonction exécutée automatiquement toutes les minutes par Jeedom */
+  public static function cron()
+  {
+    $cronMinute = config::byKey('cronHeure', __CLASS__);
+    if (!empty($cronHeure) && date('h') != $cronHeure) return;
+
+    $eqLogics = self::byType(__CLASS__, true);
+
+    foreach ($eqLogics as $eqLogic)
+    {
+      if (date('G') < 4 || date('G') >= 22)
+      {
+        if ($eqLogic->getCache('getpropluviaData') == 'done') {
+          $eqLogic->setCache('getpropluviaData', null);
+        }
+        return;
+      }
+
+      if ($eqLogic->getCache('getpropluviaData') != 'done')
+      {
+        $eqLogic->pullpropluvia();
+      }
+    }
+  }
+  
 
   /*
   * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
