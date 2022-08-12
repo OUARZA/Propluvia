@@ -134,6 +134,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     							<div class="col-sm-2">
                         						<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="codeInseeCommune" placeholder="{{Code INSEE}}"/>
                     							</div>
+							<a href="http://public.opendatasoft.com/explore/dataset/correspondance-code-insee-code-postal/table/?flg=fr&location=9,45.71673,3.13522&basemap=jawg.light" target="_blank">Liste des codes INSEE</a>
                 					</div>
 							<div class="form-group">
                     						<label class="col-lg-3 control-label">{{Type}}</label>
