@@ -367,10 +367,10 @@ if(is_array($jsonData)){
           }
 
           //affichage résultat dans le log scénario
-          $scenario->setlog('');
-          $scenario->setlog('----------'.strtoupper($nomZone.' ['.$typeZone.']').'----------');
-          $scenario->setlog('Niveau >> '.$nomNiveau.' ('.$niveauRestriction.')');
-          $scenario->setlog($contenuEditorial);
+//          $scenario->setlog('');
+//          $scenario->setlog('----------'.strtoupper($nomZone.' ['.$typeZone.']').'----------');
+//          $scenario->setlog('Niveau >> '.$nomNiveau.' ('.$niveauRestriction.')');
+//          $scenario->setlog($contenuEditorial);
           //$scenario->setlog('URL legende -> '.$url_legende);
 
           //mise à jour des commmandes du virtuel
