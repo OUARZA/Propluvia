@@ -19,7 +19,7 @@
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class propluvia extends eqLogic {  
-}
+
   
   
   
