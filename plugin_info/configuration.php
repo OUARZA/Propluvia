@@ -25,11 +25,11 @@ if (!isConnect()) {
 <form class="form-horizontal">
   <fieldset>
     <div class="form-group">
-      <label class="col-md-4 control-label">{{Global param 1}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le paramètre 1 du plugin}}"></i></sup>
+      <label class="col-md-4 control-label">{{Heure de mise à jour}}
+        <sup><i class="fas fa-question-circle tooltips" title="{{Heure à laquelle le plugin va chercher les informations}}"></i></sup>
       </label>
       <div class="col-md-4">
-        <input class="configKey form-control" data-l1key="param1"/>
+        <input class="configKey form-control" data-l1key="cronHeure"/>
       </div>
     </div>
     <div class="form-group">
