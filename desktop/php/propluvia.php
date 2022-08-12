@@ -141,6 +141,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     							<div class="col-sm-2">
                         						<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="typeInfo" placeholder="{{Type}}"/>
                     							</div>
+							Part = Particulier / Pro = Profesionnel / XX
                 					</div>
 							
 							<legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
