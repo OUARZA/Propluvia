@@ -319,7 +319,7 @@ if(is_array($jsonData)){
   if ($jsonData['message'] != NULL) {
     $scenario->setlog('Aucun arrêté trouvé à la date du '.$date. ' pour la commune de '.$nomCommune);
     // mise à jour virtuel
-    cmd::byString('#[Info][Propluvia info][Département]#')->event('');
+    cmd::byString('departement')->event('');
     cmd::byString('#[Info][Propluvia info][Date début arrêté]#')->event('Aucun arrêté trouvé à la date du '.$date);
     cmd::byString('#[Info][Propluvia info][Date fin arrêté]#')->event('');
     cmd::byString('#[Info][Propluvia info][Commune]#')->event($nomCommune);
@@ -337,12 +337,12 @@ if(is_array($jsonData)){
     $dateDebutValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateDebutValiditeArrete']));
     $dateFinValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateFinValiditeArrete']));
     //affichage info arreté
-    $scenario->setlog('Département            : '.$codeInseeDepartement);
-    $scenario->setlog('Début validité arrêté  : '.$dateDebutValiditeArrete);
-    $scenario->setlog('Fin validité arrêté    : '.$dateFinValiditeArrete);
-    $scenario->setlog('Commune                : '.$nomCommune);
+//    $scenario->setlog('Département            : '.$codeInseeDepartement);
+//    $scenario->setlog('Début validité arrêté  : '.$dateDebutValiditeArrete);
+//    $scenario->setlog('Fin validité arrêté    : '.$dateFinValiditeArrete);
+//    $scenario->setlog('Commune                : '.$nomCommune);
     //mise à jour des commmandes du virtuel
-    cmd::byString('#[Info][Propluvia info][Département]#')->event($codeInseeDepartement);
+    cmd::byString('departement')->event($codeInseeDepartement);
     cmd::byString('#[Info][Propluvia info][Date début arrêté]#')->event($dateDebutValiditeArrete);
     cmd::byString('#[Info][Propluvia info][Date fin arrêté]#')->event($dateFinValiditeArrete);
     cmd::byString('#[Info][Propluvia info][Commune]#')->event($nomCommune);
