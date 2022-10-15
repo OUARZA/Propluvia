@@ -126,70 +126,36 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								</div>
 							</div>
 
-							<div class="alert alert-info">
-                    						{{Obligatoire pour que cela fonctionne.}}
-                					</div>
-                					<div class="form-group">
-                    						<label class="col-lg-3 control-label">{{Code INSEE}}</label>
-                    							<div class="col-sm-2">
-                        						<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="codeInseeCommune" placeholder="{{Code INSEE}}"/>
-                    							</div>
-							<a href="http://public.opendatasoft.com/explore/dataset/correspondance-code-insee-code-postal/table/?flg=fr&location=9,45.71673,3.13522&basemap=jawg.light" target="_blank">Liste des codes INSEE</a>
-                					</div>
-							<div class="form-group">
-                    						<label class="col-lg-3 control-label">{{Type}}</label>
-                    							<div class="col-sm-2">
-                        						<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="typeInfo" placeholder="{{Type}}"/>
-                    							</div>
-							Part = Particulier / Pro = Profesionnel / XX
-                					</div>
-							
 							<legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
-							<div class="form-group">
-								<label class="col-sm-4 control-label">{{Nom du paramètre n°1}}
-									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le paramètre n°1 de l'équipement}}"></i></sup>
-								</label>
-								<div class="col-sm-6">
-									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="param1" placeholder="{{Paramètre n°1}}">
-								</div>
+                            <div class="form-group">
+                            	<label class="col-sm-4 control-label">{{Code INSEE commune}}</label>
+                                <div class="col-sm-3">
+                                	<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="codeInseeCommune" placeholder="{{Code INSEE}}"/>
+                                </div>
+                                <a href="http://public.opendatasoft.com/explore/dataset/correspondance-code-insee-code-postal/table/?flg=fr&location=9,45.71673,3.13522&basemap=jawg.light" target="_blank">Liste des codes INSEE</a>
 							</div>
-							<div class="form-group">
-								<label class="col-sm-4 control-label"> {{Mot de passe}}
-									<sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le mot de passe}}"></i></sup>
-								</label>
-								<div class="col-sm-6">
-									<input type="text" class="eqLogicAttr form-control inputPassword" data-l1key="configuration" data-l2key="password">
-								</div>
-							</div>
-							<!-- Exemple de champ de saisie du cron d'auto-actualisation avec assistant -->
-							<!-- La fonction cron de la classe du plugin doit contenir le code prévu pour que ce champ soit fonctionnel -->
-							<div class="form-group">
-								<label class="col-sm-4 control-label">{{Auto-actualisation}}
-									<sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement des commandes infos de l'équipement}}"></i></sup>
-								</label>
-								<div class="col-sm-6">
-									<div class="input-group">
-										<input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="autorefresh" placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}">
-										<span class="input-group-btn">
-											<a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
-												<i class="fas fa-question-circle"></i>
-											</a>
-										</span>
-									</div>
-								</div>
-							</div>
+                            <div class="form-group">
+                            	<label class="col-sm-4 control-label">{{Type éditorial}}</label>
+                                <div class="col-sm-3">
+                                  <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeInfo">
+                                    <option value="part">{{Particulier}}</option>
+                                    <option value="pro">{{Profesionnel}}</option>
+                                    <option value="">{{Tout}}</option>
+                                  </select>
+                                </div>
+                        	</div>
 						</div>
 
 						<!-- Partie droite de l'onglet "Équipement" -->
 						<!-- Affiche un champ de commentaire par défaut mais vous pouvez y mettre ce que vous voulez -->
 						<div class="col-lg-6">
 							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
-							<div class="form-group">
-								<label class="col-sm-4 control-label">{{Description}}</label>
-								<div class="col-sm-6">
-									<textarea class="form-control eqLogicAttr autogrow" data-l1key="comment"></textarea>
-								</div>
+							
+                            <div class="form-group">
+								<label class="col-sm-3 control-label">{{Commune :}}</label>
+								<label class="col-sm-2 control-label"><?= $eqLogic ? $eqLogic->getConfiguration('commune') : ''; ?></label>
 							</div>
+                            
 						</div>
 					</fieldset>
 				</form>
