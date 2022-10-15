@@ -20,8 +20,8 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
-	"documentation" : "https://jeedom.github.io/plugin-template/#language#/",
+	"changelog" : "https://github.com/OUARZA/Propluvia/blob/main/docs/#language#/changelog.md",
+	"documentation" : "https://github.com/OUARZA/Propluvia/blob/main/docs/#language#/index.md",
 	"changelog_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/changelog",
 	"documentation_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/",
 	"link" : {
