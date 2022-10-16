@@ -139,12 +139,12 @@ class propluvia extends eqLogic {
     $info->setSubType('string');
     $info->save();
 
-    $info = $this->getCmd(null, 'arrete_sup');
+    $info = $this->getCmd(null, 'numero_arrete');
     if (!is_object($info)) {
       $info = new propluviaCmd();
-      $info->setName(__('Arrêté SUP', __FILE__));
+      $info->setName(__('Numéro arrêté', __FILE__));
     }
-    $info->setLogicalId('arrete_sup');
+    $info->setLogicalId('numero_arrete');
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
@@ -330,6 +330,7 @@ class propluvia extends eqLogic {
 
         // mise à jour des commandes
         $this->checkAndUpdateCmd('departement', '');
+        $this->checkAndUpdateCmd('numero_arrete', '');
         $this->checkAndUpdateCmd('date_debut', 'Aucun arrêté trouvé à la date du '.$date);
         $this->checkAndUpdateCmd('date_fin', '');
         $this->checkAndUpdateCmd('commune', $nomCommune);
@@ -346,13 +347,16 @@ class propluvia extends eqLogic {
         $codeInseeDepartement = $jsonData[0]['codeInseeDepartement'];
         $dateDebutValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateDebutValiditeArrete']));
         $dateFinValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateFinValiditeArrete']));
+        $numeroArrete = $jsonData[0]['numeroArrete'];
         //mise à jour des commandes et log avec info arrêté
-        log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
+      	log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
+        log::add(__CLASS__, 'debug', 'Numéro arrêté          : '.$numeroArrete);
         log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
         log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
         log::add(__CLASS__, 'debug', 'Commune                : '.$nomCommune);
 
         $this->checkAndUpdateCmd('departement', $codeInseeDepartement);
+        $this->checkAndUpdateCmd('numero_arrete', $numeroArrete);
         $this->checkAndUpdateCmd('date_debut', $dateDebutValiditeArrete);
         $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
         $this->checkAndUpdateCmd('commune', $nomCommune);
