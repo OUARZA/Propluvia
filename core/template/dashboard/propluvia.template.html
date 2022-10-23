@@ -1,50 +1,14 @@
-<div class="cmd cmd-widget #history#" data-type="info" data-subtype="string" data-template="default" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
-  <div class="content-xs">
-//    <span class="cmdName #hide_name#">#name_display#</span> <strong class="state"></strong>
-	<table style="width: 100%; border-collapse: collapse; border-style: dashed;" border="1">
-			<tbody>
-				<tr>
-					<td style="width: 100%;">
-					<div class="cmd cmd-widget history cursor tooltipstered" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#commune#" title="#commune#" >
-					</td>
-				</tr>
-				<tr>
-					<td style="width: 100%;">
-					<div class="cmd cmd-widget history cursor tooltipstered" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#commune#" title="#commune#" >
-					</td>
-				</tr>
-				<tr>
-					<td style="width: 100%;">
-					<div class="cmd cmd-widget history cursor tooltipstered" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#commune#" title="#commune#" >
-					</td>
-				</tr>
-				<tr>
-					<td style="width: 100%;">
-					<div class="cmd cmd-widget history cursor tooltipstered" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#commune#" title="#commune#" >
-					</td>
-				</tr>
-			</tbody>
-		</table>
+<div class="eqLogic eqLogic-widget allowResize allowReorderCmd #custom_layout# #eqLogic_class# #class#" data-eqType="#eqType#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="dashboard" style="width: #width#;height: #height#;#style#">
+  <center class="widget-name">
+    <span class="warning" title="#alert_name#">
+      <i class='#alert_icon#'></i>
+    </span>
+    <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
+      <i class="fas fa-sync"></i>
+    </span>
+    <span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+    <a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+  </center>
+  <div class="content-sm">
   </div>
-  <template></template>
-  <script>
-    jeedom.cmd.addUpdateFunction('#id#',function(_options) {
-      let cmd = $('.cmd[data-cmd_id=#id#]')
-      cmd.attr('title', '{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)
-      cmd.find('.state').empty().append(_options.display_value+' #unite#')
-      if (_options.alertLevel) {
-        if (_options.alertLevel == 'warning') {
-          cmd.addClass('label label-warning')
-          cmd.attr('data-alertlevel','warning')
-        } else if (_options.alertLevel == 'danger') {
-          cmd.addClass('label label-danger')
-          cmd.attr('data-alertlevel','danger')
-        } else {
-          cmd.removeClass('label label-warning label-danger')
-          cmd.attr('data-alertlevel','none')
-        }
-      }
-    });
-    jeedom.cmd.refreshValue([{cmd_id :'#id#',display_value: '#state#', valueDate: '#valueDate#', collectDate: '#collectDate#', alertLevel: '#alertLevel#', unit: '#unite#'}])
-  </script>
 </div>
