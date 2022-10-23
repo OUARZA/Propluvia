@@ -135,6 +135,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <a href="http://public.opendatasoft.com/explore/dataset/correspondance-code-insee-code-postal/table/?flg=fr&location=9,45.71673,3.13522&basemap=jawg.light" target="_blank">Liste des codes INSEE</a>
 							</div>
                             <div class="form-group">
+                            	<label class="col-sm-4 control-label">{{Restrictions spécifiques}}</label>
+                                <div class="col-sm-3">
+                                  <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeRestriction">
+                                    <option value="sup">{{eaux superficielles}}</option>
+                                    <option value="sou">{{eaux souterraines}}</option>
+                                    <option value="all">{{eaux sup et sou}}</option>
+                                  </select>
+                                </div>
+                        	</div>
+                            <div class="form-group">
                             	<label class="col-sm-4 control-label">{{Type éditorial}}</label>
                                 <div class="col-sm-3">
                                   <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeInfo">
@@ -147,13 +157,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						</div>
 
 						<!-- Partie droite de l'onglet "Équipement" -->
-						<!-- Affiche un champ de commentaire par défaut mais vous pouvez y mettre ce que vous voulez -->
 						<div class="col-lg-6">
 							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
 							
                             <div class="form-group">
 								<label class="col-sm-3 control-label">{{Commune :}}</label>
-								<label class="col-sm-2 control-label"><?= $eqLogic ? $eqLogic->getConfiguration('commune') : ''; ?></label>
+								<label class="col-sm-3 control-label"><?= $eqLogic ? $eqLogic->getConfiguration('commune') : ''; ?></label>
 							</div>
                             
 						</div>
