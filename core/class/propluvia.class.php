@@ -102,6 +102,8 @@ class propluvia extends eqLogic {
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
   public function preSave() {
+    $this->setDisplay("width","800px");
+    $this->setDisplay("height","800px");
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     //récupération nom commune
     $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
