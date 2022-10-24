@@ -472,10 +472,88 @@ class propluvia extends eqLogic {
   }
   */
 
-  /*
-  * Permet de modifier l'affichage du widget (également utilisable par les commandes)
-  public function toHtml($_version = 'dashboard') {}
+  /** Permet de modifier l'affichage du widget (également utilisable par les commandes)*/
+  public function toHtml($_version = 'dashboard') {
+  /* 
+  // a n'utiliser que si dans la config de l'eqLogic, on laisse le choix a l'user d'utiliser le widget du plugin, ou les widget par défaut du core
+   if ($this->getConfiguration('widgetTemplate') != 1) {
+    return parent::toHtml($_version);
+  } 
   */
+  $this->emptyCacheWidget(); // a utiliser qu'en environnement de dev.
+  $replace = $this->preToHtml($_version); // initialise les tag standards : #id#, #name# ...
+  
+  if (!is_array($replace)) {
+    return $replace;
+  }
+  
+  $version = jeedom::versionAlias($_version);
+    
+
+foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type info
+  $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd(); //initialise les tag en fonction du logicalId
+}    
+    
+/*  $commune = $this->getCmd(null, 'commune');
+  $replace['#commune#'] = is_object($commune) ? $commune->execCmd() : '';
+    
+  $departement = $this->getCmd(null, 'departement');
+  $replace['#departement#'] = is_object($departement) ? $departement->execCmd() : '';
+    
+  $numero_arrete = $this->getCmd(null, 'numero_arrete');
+  $replace['#numero_arrete#'] = is_object($numero_arrete) ? $numero_arrete->execCmd() : '';    
+    
+  $date_debut = $this->getCmd(null, 'date_debut');
+  $replace['#date_debut#'] = is_object($date_debut) ? $date_debut->execCmd() : '';        
+    
+  $date_fin = $this->getCmd(null, 'date_fin');
+  $replace['#date_fin#'] = is_object($date_fin) ? $date_fin->execCmd() : '';     
+    
+  $nom_zone_sup = $this->getCmd(null, 'nom_zone_sup');
+  $replace['#nom_zone_sup#'] = is_object($nom_zone_sup) ? $nom_zone_sup->execCmd() : '';
+    
+  $nom_restriction_sup = $this->getCmd(null, 'nom_restriction_sup');
+  $replace['#nom_restriction_sup#'] = is_object($nom_restriction_sup) ? $nom_restriction_sup->execCmd() : '';
+    
+  $editorial_zone_sup = $this->getCmd(null, 'editorial_zone_sup');
+  $replace['#editorial_zone_sup#'] = is_object($editorial_zone_sup) ? $editorial_zone_sup->execCmd() : '';    
+    
+  $nom_zone_sou = $this->getCmd(null, 'nom_zone_sou');
+  $replace['#nom_zone_sou#'] = is_object($nom_zone_sou) ? $nom_zone_sou->execCmd() : '';     
+    
+  $nom_restriction_sou = $this->getCmd(null, 'nom_restriction_sou');
+  $replace['#nom_restriction_sou#'] = is_object($nom_restriction_sou) ? $nom_restriction_sou->execCmd() : '';     
+    
+  $niveau_restriction_sou = $this->getCmd(null, 'niveau_restriction_sou');
+  $replace['#niveau_restriction_sou#'] = is_object($niveau_restriction_sou) ? $niveau_restriction_sou->execCmd() : '';
+    
+  $editorial_zone_sou = $this->getCmd(null, 'editorial_zone_sou');
+  $replace['#editorial_zone_sou#'] = is_object($editorial_zone_sou) ? $editorial_zone_sou->execCmd() : '';  
+*/    
+//  $replace['#commune#'] = $this->getConfiguration('commune'); // ton tag perso
+//  $replace['#numero_arrete#'] = $this->getConfiguration('numero_arrete');
+//  $replace['#date_debut#'] = $this->getConfiguration('date_debut');
+//  $replace['#date_fin#'] = $this->getConfiguration('date_fin');
+//  $replace['#nom_zone_sup#'] = $this->getConfiguration('nom_zone_sup');
+//  $replace['#nom_restriction_sup#'] = $this->getConfiguration('nom_restriction_sup');
+//  $replace['#editorial_zone_sup#'] = $this->getConfiguration('editorial_zone_sup');
+//  $replace['#nom_zone_sou#'] = $this->getConfiguration('nom_zone_sou');
+//  $replace['#nom_restriction_sou#'] = $this->getConfiguration('nom_restriction_sou');
+//  $replace['#niveau_restriction_sou#'] = $this->getConfiguration('niveau_restriction_sou');
+//  $replace['#editorial_zone_sou#'] = $this->getConfiguration('editorial_zone_sou');
+  
+  /* plusieurs lignes séparées pour comprendre */
+  $getTemplate = getTemplate('core', $version, 'propluvia.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+  $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+  $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+  return $postToHtml; // renvoie le code du template du widget.
+  
+  /* 
+  // Ces 4 lignes ci-dessus peuvent être concaténer comme ceci : 
+  return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'propluvia.template' , __CLASS__)));
+  */
+  
+  }
 
   /*
   * Permet de déclencher une action avant modification d'une variable de configuration du plugin
