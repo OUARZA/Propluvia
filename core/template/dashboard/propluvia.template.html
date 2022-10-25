@@ -13,44 +13,101 @@
     <center>
 <style>
 	.demo {
-		border:2px solide #FFFFFF;
-      border-radius: 25% 10%;
+		border-radius: 500px 500px 500px 500px / 250px 205px 250px 250px;
+		border : solid 2px #FFFFFF;
 		padding:5px;
+      	background-color: #E5EFFF !important;
+      	columns:2;
+	}
+  	.tableaux{
+  		display:inline-block;
+  		vertical-align:top;
 	}
 	.demo th {
-		border:2px solide #FFFFFF;
 		padding:5px;
+     	background-color: #E5EFFF !important;
+      	column-span: all;
 	}
 	.demo td {
-		border:2px solide #FFFFFF;
+		
 		padding:5px;
+      background-color: #E5EFFF !important;
       	
 	}
 </style>
 <table class="demo">
-	<caption>Tableau 1</caption>
-	<thead>
-	<tr>
-		<th>En-tête 1</th>
-		<th>En-tête 2</th>
-	</tr>
-	</thead>
 	<tbody>
 	<tr>
-		<td>Commune : #commune# (#departement#)</td>	
+		<td><i class='fas fa-map-pin '></i></td>
+      	<td>Commune : #commune# (#departement#)</td>
 	</tr>
 	<tr>
+      	<td><i class='fas fa-pen '></i></td>
 		<td>Arrêté : n°#numero_arrete#</td>
 	</tr>
     <tr>
+      	<td><i class='fas fa-angle-right '></i></td>
 		<td>Date de début : #date_debut#</td>
 	</tr>
     <tr>
+      	<td text-align: center;><i class='fas fa-angle-right '></i></td>
 		<td>Date de fin : #date_fin#</td>
 	</tr>
 	</tbody>
 </table>
-OFF:
+<div class="tableaux">
+<table class="demo">
+	<tbody>
+    <tr>
+      <th><center>Eaux superficielles</center></th>
+	</tr>
+	<tr>
+		<td><i class='fas fa-map-pin '></i></td>
+      	<td>Commune : #commune# (#departement#)</td>
+	</tr>
+	<tr>
+      	<td><i class='fas fa-pen '></i></td>
+		<td>Arrêté : n°#numero_arrete#</td>
+	</tr>
+    <tr>
+      	<td><i class='fas fa-angle-right '></i></td>
+		<td>Date de début : #date_debut#</td>
+	</tr>
+    <tr>
+      	<td text-align: center;><i class='fas fa-angle-right '></i></td>
+		<td>Date de fin : #date_fin#</td>
+	</tr>
+	</tbody>
+</table>
+</div>
+
+<div class="tableaux">      
+<table class="demo">
+	<tbody>
+    <tr>
+      <th><center>Eaux souterraines</center></th>
+	</tr>
+	<tr>
+		<td><i class='fas fa-map-pin '></i></td>
+      	<td>Commune : #commune# (#departement#)</td>
+	</tr>
+	<tr>
+      	<td><i class='fas fa-pen '></i></td>
+		<td>Arrêté : n°#numero_arrete#</td>
+	</tr>
+    <tr>
+      	<td><i class='fas fa-angle-right '></i></td>
+		<td>Date de début : #date_debut#</td>
+	</tr>
+    <tr>
+      	<td text-align: center;><i class='fas fa-angle-right '></i></td>
+		<td>Date de fin : #date_fin#</td>
+	</tr>
+	</tbody>
+</table>
+</div>
+<div>
+  OFF:
 #commune#
 #numero_arrete#
 #date_debut#
@@ -62,6 +119,7 @@ OFF:
 #nom_restriction_sou#
 #niveau_restriction_sou#
 #editorial_zone_sou#
+      </div>
     </center>
   </div>
   #divGraphInfo#
