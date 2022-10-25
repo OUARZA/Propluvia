@@ -138,9 +138,9 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             	<label class="col-sm-4 control-label">{{Restrictions spécifiques}}</label>
                                 <div class="col-sm-3">
                                   <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeRestriction">
-                                    <option value="sup">{{eaux superficielles}}</option>
-                                    <option value="sou">{{eaux souterraines}}</option>
-                                    <option value="all">{{eaux sup et sou}}</option>
+                                    <option value="sup">{{Eaux superficielles}}</option>
+                                    <option value="sou">{{Eaux souterraines}}</option>
+                                    <option value="all">{{Les deux}}</option>
                                   </select>
                                 </div>
                         	</div>
