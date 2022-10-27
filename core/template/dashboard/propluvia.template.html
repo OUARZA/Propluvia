@@ -1,4 +1,5 @@
 <div class="eqLogic eqLogic-widget allowResize allowReorderCmd #custom_layout# #eqLogic_class# #class#" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#">
+  <link rel="stylesheet" href="plugins/propluvia/core/template/css/propluvia.dashboard.css" />
   <center class="widget-name">
     <span class="warning" title="#alert_name#">
       <i class='#alert_icon#'></i>
@@ -11,70 +12,47 @@
   </center>
   <div class="#isVerticalAlign#">
     <center>
-<style>
-	.demo {
-		border-radius: 500px 500px 500px 500px / 250px 205px 250px 250px;
-		border : solid 2px #FFFFFF;
-		padding:5px;
-      	background-color: #E5EFFF !important;
-      	columns:2;
-	}
-  	.tableaux{
-  		display:inline-block;
-  		vertical-align:top;
-	}
-	.demo th {
-		padding:5px;
-     	background-color: #E5EFFF !important;
-      	column-span: all;
-	}
-	.demo td {
-		
-		padding:5px;
-      background-color: #E5EFFF !important;
-      	
-	}
-</style>
-<table class="demo">
+
+<table class="tableau">
 	<tbody>
 	<tr>
-		<td><i class='fas fa-map-pin '></i></td>
+		<td><i class='fas fa-map-pin'></i></td>
       	<td>Commune : #commune# (#departement#)</td>
 	</tr>
 	<tr>
-      	<td><i class='fas fa-pen '></i></td>
+      	<td><i class='fas fa-pen'></i></td>
 		<td>Arrêté : n°#numero_arrete#</td>
 	</tr>
     <tr>
-      	<td><i class='fas fa-angle-right '></i></td>
+      	<td><i class='fas fa-angle-right'></i></td>
 		<td>Date de début : #date_debut#</td>
 	</tr>
     <tr>
-      	<td text-align: center;><i class='fas fa-angle-right '></i></td>
+      	<td><i class='fas fa-angle-right'></i></td>
 		<td>Date de fin : #date_fin#</td>
 	</tr>
 	</tbody>
 </table>
 <div class="tableaux">
-<table class="demo">
+<table class="tableau">
 	<tbody>
     <tr>
-      <th><center>Eaux superficielles</center></th>
+      <td colspan="2"><center>Eaux superficielles</center></td>
 	</tr>
 	<tr>
-		<td><i class='fas fa-map-pin '></i></td>
+		<td><i class='fas fa-map-pin'></i></td>
       	<td>Commune : #commune# (#departement#)</td>
 	</tr>
 	<tr>
-      	<td><i class='fas fa-pen '></i></td>
+      	<td><i class='fas fa-pen'></i></td>
 		<td>Arrêté : n°#numero_arrete#</td>
 	</tr>
     <tr>
-      	<td><i class='fas fa-angle-right '></i></td>
+      	<td><i class='fas fa-angle-right'></i></td>
 		<td>Date de début : #date_debut#</td>
 	</tr>
     <tr>
-      	<td text-align: center;><i class='fas fa-angle-right '></i></td>
+      	<td><i class='fas fa-angle-right'></i></td>
 		<td>Date de fin : #date_fin#</td>
 	</tr>
 	</tbody>
@@ -82,25 +60,25 @@
 </div>
 
 <div class="tableaux">      
-<table class="demo">
+<table class="tableau">
 	<tbody>
     <tr>
-      <th><center>Eaux souterraines</center></th>
+      <td colspan="2"><center>Eaux souterraines</center></td>
 	</tr>
 	<tr>
-		<td><i class='fas fa-map-pin '></i></td>
+		<td><i class='fas fa-map-pin'></i></td>
       	<td>Commune : #commune# (#departement#)</td>
 	</tr>
 	<tr>
-      	<td><i class='fas fa-pen '></i></td>
+      	<td><i class='fas fa-pen'></i></td>
 		<td>Arrêté : n°#numero_arrete#</td>
 	</tr>
     <tr>
-      	<td><i class='fas fa-angle-right '></i></td>
+      	<td><i class='fas fa-angle-right'></i></td>
 		<td>Date de début : #date_debut#</td>
 	</tr>
     <tr>
-      	<td text-align: center;><i class='fas fa-angle-right '></i></td>
+      	<td><i class='fas fa-angle-right'></i></td>
 		<td>Date de fin : #date_fin#</td>
 	</tr>
 	</tbody>
@@ -124,6 +102,12 @@
   </div>
   #divGraphInfo#
   <script>
+//    var eqLogic = $('.eqLogic[data-eqLogic_uid=#uid#]')
+//    var eqlogic_height = eqLogic.height()
+//    eqLogic.find('.propluviaCdc').css('font-size', (eqlogic_height * 0.05) + 'px')
+//    eqLogic.find('.propluviaValue, .propluviaTitle').css('font-size', (eqlogic_height * 0.06) + 'px')
+//    eqLogic.find('.propluviaUnite, .propluviaTitleIcon').css('font-size', (eqlogic_height * 0.04) + 'px')
+    
     if ('#refresh_id#' != '') {
       $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
         jeedom.cmd.execute({id: '#refresh_id#'})
