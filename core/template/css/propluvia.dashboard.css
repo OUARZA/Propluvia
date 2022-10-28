@@ -9,6 +9,7 @@
       	border-radius: 20px !important;
   		border-spacing:5px;
       	border-collapse: separate;
+      	color: #000000 !important;
       	columns:2;
 	}
 
@@ -23,7 +24,7 @@
 	.demo th {
 	}
 	.tableau td {
-		padding:5px;
+		padding:2px;
      	background-color: #C9EBF8 !important;
       	
 	}
