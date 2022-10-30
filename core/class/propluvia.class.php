@@ -103,7 +103,7 @@ class propluvia extends eqLogic {
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
   public function preSave() {
     $this->setDisplay("width","800px");
-    $this->setDisplay("height","800px");
+    $this->setDisplay("height","500px");
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     //récupération nom commune
     $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
@@ -545,11 +545,13 @@ foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type inf
 //  $replace['#editorial_zone_sou#'] = $this->getConfiguration('editorial_zone_sou');
   
   /* plusieurs lignes séparées pour comprendre */
-  $getTemplate = getTemplate('core', $version, 'propluvia.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+
+  $getTemplate = getTemplate('core', $version, 'propluvia_all.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
   $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
   $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
   return $postToHtml; // renvoie le code du template du widget.
-  
+
+    
   /* 
   // Ces 4 lignes ci-dessus peuvent être concaténer comme ceci : 
   return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'propluvia.template' , __CLASS__)));
