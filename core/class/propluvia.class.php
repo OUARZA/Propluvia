@@ -360,7 +360,7 @@ class propluvia extends eqLogic {
     $request_http->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
     $jsonData=json_decode(trim($request_http->exec()), true);
     if(!is_array($jsonData)){
-    	log::add(__CLASS__, 'error', 'le site \'https://eau.api.agriculture.gouv.fr\' renvoi une erreur ou n\'est pas accessible');        
+    	log::add(__CLASS__, 'error', 'le site \'https://eau.api.agriculture.gouv.fr\' renvoie une erreur ou n\'est pas accessible');        
     } else {      
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
