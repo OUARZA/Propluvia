@@ -182,7 +182,7 @@ class propluvia extends eqLogic {
       $info = $this->getCmd(null, 'nom_zone_sup');
       if (!is_object($info)) {
         $info = new propluviaCmd();
-        $info->setName(__('Nom eau SUP', __FILE__));
+        $info->setName(__('Nom zone SUP', __FILE__));
       }
       $info->setLogicalId('nom_zone_sup');
       $info->setEqLogic_id($this->getId());
@@ -252,7 +252,7 @@ class propluvia extends eqLogic {
       $info = $this->getCmd(null, 'nom_zone_sou');
       if (!is_object($info)) {
         $info = new propluviaCmd();
-        $info->setName(__('Nom eau SOU', __FILE__));
+        $info->setName(__('Nom zone SOU', __FILE__));
       }
       $info->setLogicalId('nom_zone_sou');
       $info->setEqLogic_id($this->getId());
