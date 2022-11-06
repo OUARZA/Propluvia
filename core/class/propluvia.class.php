@@ -339,7 +339,8 @@ class propluvia extends eqLogic {
       $typeInfo = '';
     }
     $trans = array(" " => "_", "é" => "e", "è" => "e");
-    log::add(__CLASS__, 'debug', '*********** PROPLUVIA ***********');
+    $eqName = $this->getName();
+    log::add(__CLASS__, 'debug', '*********** PROPLUVIA ['.$eqName.'] ***********');
     
     //récupération nom commune
     $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
@@ -358,7 +359,9 @@ class propluvia extends eqLogic {
     $request_http = new com_http($url);
     $request_http->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
     $jsonData=json_decode(trim($request_http->exec()), true);
-    if(is_array($jsonData)){
+    if(!is_array($jsonData)){
+    	log::add(__CLASS__, 'error', 'le site \'https://eau.api.agriculture.gouv.fr\' renvoi une erreur ou n\'est pas accessible');        
+    } else {      
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
         log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
