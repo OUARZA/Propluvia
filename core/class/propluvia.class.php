@@ -498,6 +498,55 @@ class propluvia extends eqLogic {
 
 foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type info
   $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd(); //initialise les tag en fonction du logicalId
+//gestion de l'affichage de l'échelle en couleurs
+  $replace['#nom_restriction_sou_N1#'] = '';
+  $replace['#nom_restriction_sou_N2#'] = '';
+  $replace['#nom_restriction_sou_N3#'] = '';
+  $replace['#nom_restriction_sou_N4#'] = '';
+  $replace['#nom_restriction_sou_N5#'] = '';
+    
+    switch ($replace['#niveau_restriction_sou#']) {
+      case 1:
+        $replace['#nom_restriction_sou_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 2:
+        $replace['#nom_restriction_sou_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 3:
+        $replace['#nom_restriction_sou_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 4:
+        $replace['#nom_restriction_sou_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 5:
+        $replace['#nom_restriction_sou_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+    }
+  
+  $replace['#nom_restriction_sup_N1#'] = '';
+  $replace['#nom_restriction_sup_N2#'] = '';
+  $replace['#nom_restriction_sup_N3#'] = '';
+  $replace['#nom_restriction_sup_N4#'] = '';
+  $replace['#nom_restriction_sup_N5#'] = '';
+  
+  switch ($replace['#niveau_restriction_sup#']) {
+      case 1:
+        $replace['#nom_restriction_sup_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 2:
+        $replace['#nom_restriction_sup_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 3:
+        $replace['#nom_restriction_sup_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 4:
+        $replace['#nom_restriction_sup_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 5:
+        $replace['#nom_restriction_sup_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+    }
+  
 }    
   
   
