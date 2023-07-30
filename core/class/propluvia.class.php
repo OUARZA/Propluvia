@@ -73,6 +73,7 @@ class propluvia extends eqLogic {
  
     foreach (eqLogic::byType(__CLASS__, true) as $propluvia) {
       $propluvia->pullpropluvia();
+      sleep(15);
     }  
   }
 
@@ -101,6 +102,8 @@ class propluvia extends eqLogic {
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
   public function preSave() {
+    $this->setDisplay("width","670px");
+    $this->setDisplay("height","340px");
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     //récupération nom commune
     $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
@@ -117,6 +120,8 @@ class propluvia extends eqLogic {
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
   public function postSave() {
+    $typeRestriction = $this->getConfiguration('typeRestriction');
+
     $info = $this->getCmd(null, 'departement');
     if (!is_object($info)) {
       $info = new propluviaCmd();
@@ -126,9 +131,10 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(1);
     $info->save();
 
-     $info = $this->getCmd(null, 'commune');
+    $info = $this->getCmd(null, 'commune');
     if (!is_object($info)) {
       $info = new propluviaCmd();
       $info->setName(__('Commune', __FILE__));
@@ -137,19 +143,34 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(2);
     $info->save();
 
-    $info = $this->getCmd(null, 'arrete_sup');
+    $info = $this->getCmd(null, 'numero_arrete');
     if (!is_object($info)) {
       $info = new propluviaCmd();
-      $info->setName(__('Arrêté SUP', __FILE__));
+      $info->setName(__('Numéro arrêté', __FILE__));
     }
-    $info->setLogicalId('arrete_sup');
+    $info->setLogicalId('numero_arrete');
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(4);
     $info->save();
 
+    $info = $this->getCmd(null, 'id_arrete');
+    if (!is_object($info)) {
+      $info = new propluviaCmd();
+      $info->setName(__('id arrêté', __FILE__));
+    }
+    $info->setLogicalId('id_arrete');
+    $info->setEqLogic_id($this->getId());
+    $info->setType('info');
+    $info->setSubType('numeric');
+	$info->setIsVisible(0);
+    $info->setOrder(3);
+    $info->save();
+    
     $info = $this->getCmd(null, 'date_debut');
     if (!is_object($info)) {
       $info = new propluviaCmd();
@@ -159,6 +180,7 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(5);
     $info->save();
 
     $info = $this->getCmd(null, 'date_fin');
@@ -170,117 +192,189 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(6);
     $info->save();
 
-    $info = $this->getCmd(null, 'type_eau_sup');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Type eau SUP', __FILE__));
-    }
-    $info->setLogicalId('type_eau_sup');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+    //commandes pour la zone d'eau superficielle
+    if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
+      $info = $this->getCmd(null, 'id_zone_sup');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('id zone SUP', __FILE__));
+      }
+      $info->setLogicalId('id_zone_sup');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('numeric');
+      $info->setIsVisible(0);
+      $info->setOrder(7);
+      $info->save();
 
-    $info = $this->getCmd(null, 'nom_zone_sup');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Nom eau SUP', __FILE__));
-    }
-    $info->setLogicalId('nom_zone_sup');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+      $info = $this->getCmd(null, 'nom_zone_sup');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Nom zone SUP', __FILE__));
+      }
+      $info->setLogicalId('nom_zone_sup');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->setOrder(8);
+      $info->save();
 
-    $info = $this->getCmd(null, 'nom_restriction_sup');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Nom restriction zone SUP', __FILE__));
-    }
-    $info->setLogicalId('nom_restriction_sup');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+      $info = $this->getCmd(null, 'nom_restriction_sup');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Nom restriction zone SUP', __FILE__));
+      }
+      $info->setLogicalId('nom_restriction_sup');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->setOrder(9);
+      $info->save();
 
-    $info = $this->getCmd(null, 'niveau_restriction_sup');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Niveau restriction zone SUP', __FILE__));
-    }
-    $info->setLogicalId('niveau_restriction_sup');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+      $info = $this->getCmd(null, 'niveau_restriction_sup');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Niveau restriction zone SUP', __FILE__));
+      }
+      $info->setLogicalId('niveau_restriction_sup');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('numeric');
+      $info->setOrder(10);
+      $info->save();
 
-    $info = $this->getCmd(null, 'editorial_zone_sup');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Editorial zone SUP', __FILE__));
-    }
-    $info->setLogicalId('editorial_zone_sup');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+      $info = $this->getCmd(null, 'editorial_zone_sup');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Editorial zone SUP', __FILE__));
+      }
+      $info->setLogicalId('editorial_zone_sup');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->setOrder(11);
+      $info->save();
+      
+	  if ($typeRestriction == 'sup') {
+        $info = $this->getCmd(null, 'id_zone_sou');
+        if (is_object($info)) {
+          $info->remove();
+        }
+        $info = $this->getCmd(null, 'nom_zone_sou');
+        if (is_object($info)) {
+          $info->remove();
+        }
 
-    $info = $this->getCmd(null, 'type_eau_sou');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Type eau SOU', __FILE__));
-    }
-    $info->setLogicalId('type_eau_sou');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+        $info = $this->getCmd(null, 'nom_restriction_sou');
+        if (is_object($info)) {
+          $info->remove();
+        }
 
-    $info = $this->getCmd(null, 'nom_zone_sou');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Nom eau SOU', __FILE__));
-    }
-    $info->setLogicalId('nom_zone_sou');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+        $info = $this->getCmd(null, 'niveau_restriction_sou');
+        if (is_object($info)) {
+          $info->remove();
+        }
 
-    $info = $this->getCmd(null, 'nom_restriction_sou');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Nom restriction zone SOU', __FILE__));
+        $info = $this->getCmd(null, 'editorial_zone_sou');
+        if (is_object($info)) {
+          $info->remove();
+        }
+      }
     }
-    $info->setLogicalId('nom_restriction_sou');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+    
 
-    $info = $this->getCmd(null, 'niveau_restriction_sou');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Niveau restriction zone SOU', __FILE__));
-    }
-    $info->setLogicalId('niveau_restriction_sou');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+    //commandes pour la zone d'eau souterraine
+    if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
+      $info = $this->getCmd(null, 'id_zone_sou');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('id zone SOU', __FILE__));
+      }
+      $info->setLogicalId('id_zone_sou');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('numeric');
+      $info->setIsVisible(0);
+      $info->setOrder(12);
+      $info->save();
 
-    $info = $this->getCmd(null, 'editorial_zone_sou');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Editorial zone SOU', __FILE__));
+      $info = $this->getCmd(null, 'nom_zone_sou');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Nom zone SOU', __FILE__));
+      }
+      $info->setLogicalId('nom_zone_sou');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->setOrder(13);
+      $info->save();
+
+      $info = $this->getCmd(null, 'nom_restriction_sou');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Nom restriction zone SOU', __FILE__));
+      }
+      $info->setLogicalId('nom_restriction_sou');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->setOrder(14);
+      $info->save();
+
+      $info = $this->getCmd(null, 'niveau_restriction_sou');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Niveau restriction zone SOU', __FILE__));
+      }
+      $info->setLogicalId('niveau_restriction_sou');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('numeric');
+      $info->setOrder(15);
+      $info->save();
+
+      $info = $this->getCmd(null, 'editorial_zone_sou');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('Editorial zone SOU', __FILE__));
+      }
+      $info->setLogicalId('editorial_zone_sou');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->setOrder(16);
+      $info->save();
+    	  
+      if ($typeRestriction == 'sou') {
+        $info = $this->getCmd(null, 'id_zone_sup');
+        if (is_object($info)) {
+          $info->remove();
+        }
+        $info = $this->getCmd(null, 'nom_zone_sup');
+        if (is_object($info)) {
+          $info->remove();
+        }
+
+        $info = $this->getCmd(null, 'nom_restriction_sup');
+        if (is_object($info)) {
+          $info->remove();
+        }
+
+        $info = $this->getCmd(null, 'niveau_restriction_sup');
+        if (is_object($info)) {
+          $info->remove();
+        }
+
+        $info = $this->getCmd(null, 'editorial_zone_sup');
+        if (is_object($info)) {
+          $info->remove();
+        }
+      }
     }
-    $info->setLogicalId('editorial_zone_sou');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
 
     $refresh = $this->getCmd(null, 'refresh');
     if (!is_object($refresh)) {
@@ -291,20 +385,23 @@ class propluvia extends eqLogic {
     $refresh->setLogicalId('refresh');
     $refresh->setType('action');
     $refresh->setSubType('other');
+    $refresh->setOrder(99);
     $refresh->save();
   }
 
   public function pullpropluvia() {
     $date = date('Y-m-d');
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
-    $typeInfo = $this->getConfiguration('typeInfo','');
+    $typeInfo = $this->getConfiguration('typeInfo');
+    $typeRestriction = $this->getConfiguration('typeRestriction');
     if (!empty($typeInfo)){
       $typeInfo = '_'.$typeInfo;
     } else {
       $typeInfo = '';
     }
     $trans = array(" " => "_", "é" => "e", "è" => "e");
-    log::add(__CLASS__, 'debug', '*********** PROPLUVIA ***********');
+    $eqName = $this->getName();
+    log::add(__CLASS__, 'debug', '*********** PROPLUVIA ['.$eqName.'] ***********');
     
     //récupération nom commune
     $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
@@ -323,13 +420,17 @@ class propluvia extends eqLogic {
     $request_http = new com_http($url);
     $request_http->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
     $jsonData=json_decode(trim($request_http->exec()), true);
-    if(is_array($jsonData)){
+    if(!is_array($jsonData)){
+    	log::add(__CLASS__, 'error', 'le site \'https://eau.api.agriculture.gouv.fr\' renvoie une erreur ou n\'est pas accessible');        
+    } else {      
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
-        log::add(__CLASS__, 'error', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
+        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
 
         // mise à jour des commandes
         $this->checkAndUpdateCmd('departement', '');
+        $this->checkAndUpdateCmd('numero_arrete', '');
+        $this->checkAndUpdateCmd('id_arrete', '');
         $this->checkAndUpdateCmd('date_debut', 'Aucun arrêté trouvé à la date du '.$date);
         $this->checkAndUpdateCmd('date_fin', '');
         $this->checkAndUpdateCmd('commune', $nomCommune);
@@ -346,13 +447,19 @@ class propluvia extends eqLogic {
         $codeInseeDepartement = $jsonData[0]['codeInseeDepartement'];
         $dateDebutValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateDebutValiditeArrete']));
         $dateFinValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateFinValiditeArrete']));
+        $numeroArrete = $jsonData[0]['numeroArrete'];
+        $idArrete = $jsonData[0]['idArrete'];
         //mise à jour des commandes et log avec info arrêté
-        log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
+      	log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
+        log::add(__CLASS__, 'debug', 'id arrêté              : '.$idArrete);
+        log::add(__CLASS__, 'debug', 'Numéro arrêté          : '.$numeroArrete);
         log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
         log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
         log::add(__CLASS__, 'debug', 'Commune                : '.$nomCommune);
 
         $this->checkAndUpdateCmd('departement', $codeInseeDepartement);
+        $this->checkAndUpdateCmd('numero_arrete', $numeroArrete);
+        $this->checkAndUpdateCmd('id_arrete', $idArrete);
         $this->checkAndUpdateCmd('date_debut', $dateDebutValiditeArrete);
         $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
         $this->checkAndUpdateCmd('commune', $nomCommune);
@@ -363,6 +470,7 @@ class propluvia extends eqLogic {
           $nomNiveau = $jsonKey['nomNiveau'];
           $nomZone =  $jsonKey['zoneAlerte']['nomZone'];
           $typeZone = $jsonKey['zoneAlerte']['typeZone'];
+          $idZone = $jsonKey['zoneAlerte']['idZone'];
 
           //balayage des communes pour récupérer uniquement info de celle recherchée
           foreach ($jsonKey['zoneAlerte']['communes'] as $value2=>$jsonKey2) {
@@ -384,33 +492,26 @@ class propluvia extends eqLogic {
               log::add(__CLASS__, 'debug', $contenuEditorial);
 
               //mise à jour des commmandes
-              if ($typeZone == 'SUP') {
+              if ($typeZone == 'SUP' && ($typeRestriction == 'sup' || $typeRestriction == 'all')) {
+                $this->checkAndUpdateCmd('id_zone_sup', $idZone);
                 $this->checkAndUpdateCmd('nom_zone_sup', $nomZone);
                 $this->checkAndUpdateCmd('niveau_restriction_sup', $niveauRestriction);
                 $this->checkAndUpdateCmd('nom_restriction_sup', $nomNiveau);      
-                $this->checkAndUpdateCmd('editorial_zone_sup', $contenuEditorial);      
-              } elseif ($typeZone == 'SOU') {
+                $this->checkAndUpdateCmd('editorial_zone_sup', $contenuEditorial);
+              }
+              if ($typeZone == 'SOU' && ($typeRestriction == 'sou' || $typeRestriction == 'all')) {
+                $this->checkAndUpdateCmd('id_zone_sou', $idZone);
                 $this->checkAndUpdateCmd('nom_zone_sou', $nomZone);
                 $this->checkAndUpdateCmd('niveau_restriction_sou', $niveauRestriction);
                 $this->checkAndUpdateCmd('nom_restriction_sou', $nomNiveau);      
                 $this->checkAndUpdateCmd('editorial_zone_sou', $contenuEditorial);      
-              } else {
-                $this->checkAndUpdateCmd('nom_zone_sup', '');
-                $this->checkAndUpdateCmd('niveau_restriction_sup', '');
-                $this->checkAndUpdateCmd('nom_restriction_sup', '');      
-                $this->checkAndUpdateCmd('editorial_zone_sup', '');      
-                $this->checkAndUpdateCmd('nom_zone_sou', '');
-                $this->checkAndUpdateCmd('niveau_restriction_sou', '');
-                $this->checkAndUpdateCmd('nom_restriction_sou', '');      
-                $this->checkAndUpdateCmd('editorial_zone_sou', '');      
-              }  
+              } 
             }
           }
         }
       }
     }
   }
-  
   
   // Fonction exécutée automatiquement avant la suppression de l'équipement
   public function preRemove() {
@@ -431,10 +532,105 @@ class propluvia extends eqLogic {
   }
   */
 
-  /*
-  * Permet de modifier l'affichage du widget (également utilisable par les commandes)
-  public function toHtml($_version = 'dashboard') {}
+  /** Permet de modifier l'affichage du widget (également utilisable par les commandes)*/
+  public function toHtml($_version = 'dashboard') {
+    $typeRestriction = $this->getConfiguration('typeRestriction'); //récupération de la valeur pour afficher le bon template
+  /* 
+  // a n'utiliser que si dans la config de l'eqLogic, on laisse le choix a l'user d'utiliser le widget du plugin, ou les widget par défaut du core
+   if ($this->getConfiguration('widgetTemplate') != 1) {
+    return parent::toHtml($_version);
+  } 
   */
+  $this->emptyCacheWidget(); // a utiliser qu'en environnement de dev.
+  $replace = $this->preToHtml($_version); // initialise les tag standards : #id#, #name# ...
+  
+  if (!is_array($replace)) {
+    return $replace;
+  }
+  
+  $version = jeedom::versionAlias($_version);
+    
+
+foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type info
+  $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd(); //initialise les tag en fonction du logicalId
+//gestion de l'affichage de l'échelle en couleurs
+  $replace['#nom_restriction_sou_N1#'] = '';
+  $replace['#nom_restriction_sou_N2#'] = '';
+  $replace['#nom_restriction_sou_N3#'] = '';
+  $replace['#nom_restriction_sou_N4#'] = '';
+  $replace['#nom_restriction_sou_N5#'] = '';
+    
+    switch ($replace['#niveau_restriction_sou#']) {
+      case 1:
+        $replace['#nom_restriction_sou_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 2:
+        $replace['#nom_restriction_sou_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 3:
+        $replace['#nom_restriction_sou_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 4:
+        $replace['#nom_restriction_sou_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 5:
+        $replace['#nom_restriction_sou_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+    }
+  
+  $replace['#nom_restriction_sup_N1#'] = '';
+  $replace['#nom_restriction_sup_N2#'] = '';
+  $replace['#nom_restriction_sup_N3#'] = '';
+  $replace['#nom_restriction_sup_N4#'] = '';
+  $replace['#nom_restriction_sup_N5#'] = '';
+  
+  switch ($replace['#niveau_restriction_sup#']) {
+      case 1:
+        $replace['#nom_restriction_sup_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 2:
+        $replace['#nom_restriction_sup_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 3:
+        $replace['#nom_restriction_sup_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 4:
+        $replace['#nom_restriction_sup_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+      case 5:
+        $replace['#nom_restriction_sup_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
+        break;
+    }
+  
+}    
+  
+  
+  /* plusieurs lignes séparées pour comprendre */
+  if ($typeRestriction == 'sup') {
+  $getTemplate = getTemplate('core', $version, 'propluvia_sup.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+  $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+  $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+  return $postToHtml; // renvoie le code du template du widget.
+  }
+  if ($typeRestriction == 'sou') {
+  $getTemplate = getTemplate('core', $version, 'propluvia_sou.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+  $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+  $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+  return $postToHtml; // renvoie le code du template du widget.
+  }
+  if ($typeRestriction == 'all') {
+  $getTemplate = getTemplate('core', $version, 'propluvia_all.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+  $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+  $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+  return $postToHtml; // renvoie le code du template du widget.
+  }
+  
+  /* 
+  // Ces 4 lignes ci-dessus peuvent être concaténer comme ceci : 
+  return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'propluvia.template' , __CLASS__)));
+  */
+  
+  }
 
   /*
   * Permet de déclencher une action avant modification d'une variable de configuration du plugin
