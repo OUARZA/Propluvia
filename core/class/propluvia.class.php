@@ -131,6 +131,7 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(1);
     $info->save();
 
     $info = $this->getCmd(null, 'commune');
@@ -142,6 +143,7 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(2);
     $info->save();
 
     $info = $this->getCmd(null, 'numero_arrete');
@@ -153,8 +155,22 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(4);
     $info->save();
 
+    $info = $this->getCmd(null, 'id_arrete');
+    if (!is_object($info)) {
+      $info = new propluviaCmd();
+      $info->setName(__('id arrêté', __FILE__));
+    }
+    $info->setLogicalId('id_arrete');
+    $info->setEqLogic_id($this->getId());
+    $info->setType('info');
+    $info->setSubType('numeric');
+	$info->setIsVisible(0);
+    $info->setOrder(3);
+    $info->save();
+    
     $info = $this->getCmd(null, 'date_debut');
     if (!is_object($info)) {
       $info = new propluviaCmd();
@@ -164,6 +180,7 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(5);
     $info->save();
 
     $info = $this->getCmd(null, 'date_fin');
@@ -175,10 +192,24 @@ class propluvia extends eqLogic {
     $info->setEqLogic_id($this->getId());
     $info->setType('info');
     $info->setSubType('string');
+    $info->setOrder(6);
     $info->save();
 
     //commandes pour la zone d'eau superficielle
     if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
+      $info = $this->getCmd(null, 'id_zone_sup');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('id zone SUP', __FILE__));
+      }
+      $info->setLogicalId('id_zone_sup');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('numeric');
+      $info->setIsVisible(0);
+      $info->setOrder(7);
+      $info->save();
+
       $info = $this->getCmd(null, 'nom_zone_sup');
       if (!is_object($info)) {
         $info = new propluviaCmd();
@@ -188,6 +219,7 @@ class propluvia extends eqLogic {
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
       $info->setSubType('string');
+      $info->setOrder(8);
       $info->save();
 
       $info = $this->getCmd(null, 'nom_restriction_sup');
@@ -199,6 +231,7 @@ class propluvia extends eqLogic {
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
       $info->setSubType('string');
+      $info->setOrder(9);
       $info->save();
 
       $info = $this->getCmd(null, 'niveau_restriction_sup');
@@ -209,7 +242,8 @@ class propluvia extends eqLogic {
       $info->setLogicalId('niveau_restriction_sup');
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
-      $info->setSubType('string');
+      $info->setSubType('numeric');
+      $info->setOrder(10);
       $info->save();
 
       $info = $this->getCmd(null, 'editorial_zone_sup');
@@ -221,9 +255,14 @@ class propluvia extends eqLogic {
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
       $info->setSubType('string');
+      $info->setOrder(11);
       $info->save();
       
 	  if ($typeRestriction == 'sup') {
+        $info = $this->getCmd(null, 'id_zone_sou');
+        if (is_object($info)) {
+          $info->remove();
+        }
         $info = $this->getCmd(null, 'nom_zone_sou');
         if (is_object($info)) {
           $info->remove();
@@ -249,6 +288,19 @@ class propluvia extends eqLogic {
 
     //commandes pour la zone d'eau souterraine
     if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
+      $info = $this->getCmd(null, 'id_zone_sou');
+      if (!is_object($info)) {
+        $info = new propluviaCmd();
+        $info->setName(__('id zone SOU', __FILE__));
+      }
+      $info->setLogicalId('id_zone_sou');
+      $info->setEqLogic_id($this->getId());
+      $info->setType('info');
+      $info->setSubType('numeric');
+      $info->setIsVisible(0);
+      $info->setOrder(12);
+      $info->save();
+
       $info = $this->getCmd(null, 'nom_zone_sou');
       if (!is_object($info)) {
         $info = new propluviaCmd();
@@ -258,6 +310,7 @@ class propluvia extends eqLogic {
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
       $info->setSubType('string');
+      $info->setOrder(13);
       $info->save();
 
       $info = $this->getCmd(null, 'nom_restriction_sou');
@@ -269,6 +322,7 @@ class propluvia extends eqLogic {
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
       $info->setSubType('string');
+      $info->setOrder(14);
       $info->save();
 
       $info = $this->getCmd(null, 'niveau_restriction_sou');
@@ -279,7 +333,8 @@ class propluvia extends eqLogic {
       $info->setLogicalId('niveau_restriction_sou');
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
-      $info->setSubType('string');
+      $info->setSubType('numeric');
+      $info->setOrder(15);
       $info->save();
 
       $info = $this->getCmd(null, 'editorial_zone_sou');
@@ -291,9 +346,14 @@ class propluvia extends eqLogic {
       $info->setEqLogic_id($this->getId());
       $info->setType('info');
       $info->setSubType('string');
+      $info->setOrder(16);
       $info->save();
     	  
       if ($typeRestriction == 'sou') {
+        $info = $this->getCmd(null, 'id_zone_sup');
+        if (is_object($info)) {
+          $info->remove();
+        }
         $info = $this->getCmd(null, 'nom_zone_sup');
         if (is_object($info)) {
           $info->remove();
@@ -325,6 +385,7 @@ class propluvia extends eqLogic {
     $refresh->setLogicalId('refresh');
     $refresh->setType('action');
     $refresh->setSubType('other');
+    $refresh->setOrder(99);
     $refresh->save();
   }
 
@@ -369,6 +430,7 @@ class propluvia extends eqLogic {
         // mise à jour des commandes
         $this->checkAndUpdateCmd('departement', '');
         $this->checkAndUpdateCmd('numero_arrete', '');
+        $this->checkAndUpdateCmd('id_arrete', '');
         $this->checkAndUpdateCmd('date_debut', 'Aucun arrêté trouvé à la date du '.$date);
         $this->checkAndUpdateCmd('date_fin', '');
         $this->checkAndUpdateCmd('commune', $nomCommune);
@@ -386,8 +448,10 @@ class propluvia extends eqLogic {
         $dateDebutValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateDebutValiditeArrete']));
         $dateFinValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateFinValiditeArrete']));
         $numeroArrete = $jsonData[0]['numeroArrete'];
+        $idArrete = $jsonData[0]['idArrete'];
         //mise à jour des commandes et log avec info arrêté
       	log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
+        log::add(__CLASS__, 'debug', 'id arrêté              : '.$idArrete);
         log::add(__CLASS__, 'debug', 'Numéro arrêté          : '.$numeroArrete);
         log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
         log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
@@ -395,6 +459,7 @@ class propluvia extends eqLogic {
 
         $this->checkAndUpdateCmd('departement', $codeInseeDepartement);
         $this->checkAndUpdateCmd('numero_arrete', $numeroArrete);
+        $this->checkAndUpdateCmd('id_arrete', $idArrete);
         $this->checkAndUpdateCmd('date_debut', $dateDebutValiditeArrete);
         $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
         $this->checkAndUpdateCmd('commune', $nomCommune);
@@ -405,6 +470,7 @@ class propluvia extends eqLogic {
           $nomNiveau = $jsonKey['nomNiveau'];
           $nomZone =  $jsonKey['zoneAlerte']['nomZone'];
           $typeZone = $jsonKey['zoneAlerte']['typeZone'];
+          $idZone = $jsonKey['zoneAlerte']['idZone'];
 
           //balayage des communes pour récupérer uniquement info de celle recherchée
           foreach ($jsonKey['zoneAlerte']['communes'] as $value2=>$jsonKey2) {
@@ -427,30 +493,19 @@ class propluvia extends eqLogic {
 
               //mise à jour des commmandes
               if ($typeZone == 'SUP' && ($typeRestriction == 'sup' || $typeRestriction == 'all')) {
+                $this->checkAndUpdateCmd('id_zone_sup', $idZone);
                 $this->checkAndUpdateCmd('nom_zone_sup', $nomZone);
                 $this->checkAndUpdateCmd('niveau_restriction_sup', $niveauRestriction);
                 $this->checkAndUpdateCmd('nom_restriction_sup', $nomNiveau);      
                 $this->checkAndUpdateCmd('editorial_zone_sup', $contenuEditorial);
               }
               if ($typeZone == 'SOU' && ($typeRestriction == 'sou' || $typeRestriction == 'all')) {
+                $this->checkAndUpdateCmd('id_zone_sou', $idZone);
                 $this->checkAndUpdateCmd('nom_zone_sou', $nomZone);
                 $this->checkAndUpdateCmd('niveau_restriction_sou', $niveauRestriction);
                 $this->checkAndUpdateCmd('nom_restriction_sou', $nomNiveau);      
                 $this->checkAndUpdateCmd('editorial_zone_sou', $contenuEditorial);      
               } 
-            
-              
-/*
-                $this->checkAndUpdateCmd('nom_zone_sup', '');
-                $this->checkAndUpdateCmd('niveau_restriction_sup', '');
-                $this->checkAndUpdateCmd('nom_restriction_sup', '');      
-                $this->checkAndUpdateCmd('editorial_zone_sup', '');      
-                $this->checkAndUpdateCmd('nom_zone_sou', '');
-                $this->checkAndUpdateCmd('niveau_restriction_sou', '');
-                $this->checkAndUpdateCmd('nom_restriction_sou', '');      
-                $this->checkAndUpdateCmd('editorial_zone_sou', ''); 
-*/
-                
             }
           }
         }
