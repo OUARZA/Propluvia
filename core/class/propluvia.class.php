@@ -428,7 +428,7 @@ class propluvia extends eqLogic {
         log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
 
         // mise à jour des commandes
-        $this->checkAndUpdateCmd('departement', '$codeInseeDepartement');
+        $this->checkAndUpdateCmd('departement', '');
         $this->checkAndUpdateCmd('numero_arrete', '');
         $this->checkAndUpdateCmd('id_arrete', 'Aucun arrêté trouvé à la date du '.$date);
         $this->checkAndUpdateCmd('date_debut', '');
