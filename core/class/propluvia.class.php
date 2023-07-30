@@ -391,7 +391,7 @@ class propluvia extends eqLogic {
 
   public function pullpropluvia() {
     $date = date('Y-m-d');
-	$newdate = date('d-m-Y')
+	$newdate = date('d-m-Y');
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     $typeInfo = $this->getConfiguration('typeInfo');
     $typeRestriction = $this->getConfiguration('typeRestriction');
