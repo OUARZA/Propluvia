@@ -391,8 +391,6 @@ class propluvia extends eqLogic {
 
   public function pullpropluvia() {
     $date = date('Y-m-d');
-    $timestamp = strtotime($date);
-	$newdate = date('d-m-Y', $timestamp);
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     $typeInfo = $this->getConfiguration('typeInfo');
     $typeRestriction = $this->getConfiguration('typeRestriction');
@@ -427,12 +425,12 @@ class propluvia extends eqLogic {
     } else {      
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
-        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$newdate. ' pour la commune '.$nomCommune);
+        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
 
         // mise à jour des commandes
         $this->checkAndUpdateCmd('departement', '$codeInseeDepartement');
         $this->checkAndUpdateCmd('numero_arrete', '');
-        $this->checkAndUpdateCmd('id_arrete', 'Aucun arrêté trouvé à la date du '.$newdate);
+        $this->checkAndUpdateCmd('id_arrete', 'Aucun arrêté trouvé à la date du '.$date);
         $this->checkAndUpdateCmd('date_debut', '');
         $this->checkAndUpdateCmd('date_fin', '');
         $this->checkAndUpdateCmd('commune', $nomCommune);
