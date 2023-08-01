@@ -436,11 +436,11 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('date_fin', '');
         $this->checkAndUpdateCmd('commune', $nomCommune);
         $this->checkAndUpdateCmd('nom_zone_sup', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sup', '0');
+        $this->checkAndUpdateCmd('niveau_restriction_sup', '1');
         $this->checkAndUpdateCmd('nom_restriction_sup', '');      
         $this->checkAndUpdateCmd('editorial_zone_sup', '');      
         $this->checkAndUpdateCmd('nom_zone_sou', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sou', '0');
+        $this->checkAndUpdateCmd('niveau_restriction_sou', '1');
         $this->checkAndUpdateCmd('nom_restriction_sou', '');      
         $this->checkAndUpdateCmd('editorial_zone_sou', '');      
 
