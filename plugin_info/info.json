@@ -20,10 +20,10 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://github.com/OUARZA/Propluvia/blob/main/docs/#language#/changelog.md",
-	"documentation" : "https://github.com/OUARZA/Propluvia/blob/main/docs/#language#/index.md",
-	"changelog_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/changelog",
-	"documentation_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/",
+	"changelog" : "https://github.com/OUARZA/Propluvia/blob/stable/docs/#language#/changelog.md",
+	"documentation" : "https://github.com/OUARZA/Propluvia/blob/stable/docs/#language#/index.md",
+	"changelog_beta" : "https://github.com/OUARZA/Propluvia/blob/beta/docs/#language#/changelog.md",
+	"documentation_beta" : "https://github.com/OUARZA/Propluvia/blob/beta/docs/#language#/index.md",
 	"link" : {
 		"forum":"Lien vers le forum",
 		"video" : "Lien vers une video"
