@@ -391,6 +391,7 @@ class propluvia extends eqLogic {
 
   public function pullpropluvia() {
     $date = date('Y-m-d');
+	$dateFormat = date('d/m/Y', strtotime($date));
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     $typeInfo = $this->getConfiguration('typeInfo');
     $typeRestriction = $this->getConfiguration('typeRestriction');
@@ -425,21 +426,21 @@ class propluvia extends eqLogic {
     } else {      
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
-        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
+        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
 
         // mise à jour des commandes
         $this->checkAndUpdateCmd('departement', '');
-        $this->checkAndUpdateCmd('numero_arrete', '');
-        $this->checkAndUpdateCmd('id_arrete', 'Aucun arrêté trouvé à la date du '.$date);
+        $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
+        $this->checkAndUpdateCmd('id_arrete', '');
         $this->checkAndUpdateCmd('date_debut', '');
         $this->checkAndUpdateCmd('date_fin', '');
         $this->checkAndUpdateCmd('commune', $nomCommune);
         $this->checkAndUpdateCmd('nom_zone_sup', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sup', '');
+        $this->checkAndUpdateCmd('niveau_restriction_sup', '0');
         $this->checkAndUpdateCmd('nom_restriction_sup', '');      
         $this->checkAndUpdateCmd('editorial_zone_sup', '');      
         $this->checkAndUpdateCmd('nom_zone_sou', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sou', '');
+        $this->checkAndUpdateCmd('niveau_restriction_sou', '0');
         $this->checkAndUpdateCmd('nom_restriction_sou', '');      
         $this->checkAndUpdateCmd('editorial_zone_sou', '');      
 
