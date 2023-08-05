@@ -429,18 +429,18 @@ class propluvia extends eqLogic {
         log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
 
         // mise à jour des commandes
-        $this->checkAndUpdateCmd('departement', '');
+        $this->checkAndUpdateCmd('departement', ''); //si pas d'arrêté, le json ne contient pas le code département donc pas possible de l'afficher -> voir pour le récupérer d'ailleurs
         $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
-        $this->checkAndUpdateCmd('id_arrete', '');
+        $this->checkAndUpdateCmd('id_arrete', 0);
         $this->checkAndUpdateCmd('date_debut', '');
         $this->checkAndUpdateCmd('date_fin', '');
         $this->checkAndUpdateCmd('commune', $nomCommune);
         $this->checkAndUpdateCmd('nom_zone_sup', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sup', '1');
+        $this->checkAndUpdateCmd('niveau_restriction_sup', 0);
         $this->checkAndUpdateCmd('nom_restriction_sup', '');      
         $this->checkAndUpdateCmd('editorial_zone_sup', '');      
         $this->checkAndUpdateCmd('nom_zone_sou', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sou', '1');
+        $this->checkAndUpdateCmd('niveau_restriction_sou', 0);
         $this->checkAndUpdateCmd('nom_restriction_sou', '');      
         $this->checkAndUpdateCmd('editorial_zone_sou', '');      
 
@@ -464,6 +464,18 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('date_debut', $dateDebutValiditeArrete);
         $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
         $this->checkAndUpdateCmd('commune', $nomCommune);
+        
+        //effacement des commandes zones avant mise à jour
+        $this->checkAndUpdateCmd('id_zone_sup', '');
+        $this->checkAndUpdateCmd('nom_zone_sup', 'Aucune zone SUP trouvée');
+        $this->checkAndUpdateCmd('niveau_restriction_sup', 0);
+        $this->checkAndUpdateCmd('nom_restriction_sup', '');      
+        $this->checkAndUpdateCmd('editorial_zone_sup', '');
+        $this->checkAndUpdateCmd('id_zone_sou', '');
+        $this->checkAndUpdateCmd('nom_zone_sou', 'Aucune zone SOU trouvée');
+        $this->checkAndUpdateCmd('niveau_restriction_sou',0);
+        $this->checkAndUpdateCmd('nom_restriction_sou', '');      
+        $this->checkAndUpdateCmd('editorial_zone_sou', '');   
 
         //balayage des zones
         foreach ($jsonData[0]['restrictions'] as $value=>$jsonKey) {       
@@ -562,10 +574,10 @@ foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type inf
   $replace['#nom_restriction_sou_N5#'] = '';
     
     switch ($replace['#niveau_restriction_sou#']) {
-      case 1:
+      case 0:
         $replace['#nom_restriction_sou_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
         break;
-      case 2:
+      case 1:
         $replace['#nom_restriction_sou_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
         break;
       case 3:
@@ -586,10 +598,10 @@ foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type inf
   $replace['#nom_restriction_sup_N5#'] = '';
   
   switch ($replace['#niveau_restriction_sup#']) {
-      case 1:
+      case 0:
         $replace['#nom_restriction_sup_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
         break;
-      case 2:
+      case 1:
         $replace['#nom_restriction_sup_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
         break;
       case 3:
