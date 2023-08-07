@@ -158,7 +158,7 @@ class propluvia extends eqLogic {
     $info->setOrder(4);
     $info->save();
 
-    $info = $this->getCmd(null, 'id_arrete');		//----> ne sert pas, à supprimer pour la stable
+    $info = $this->getCmd(null, 'id_arrete');		//----> ne sert pas, à suprimer pour la stable
     if (!is_object($info)) {
       $info = new propluviaCmd();
       $info->setName(__('id arrêté', __FILE__));
@@ -197,7 +197,7 @@ class propluvia extends eqLogic {
 
     //commandes pour la zone d'eau superficielle
     if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'id_zone_sup');		//----> ne sert pas, à supprimer pour la stable
+      $info = $this->getCmd(null, 'id_zone_sup');		//----> ne sert pas, à suprimer pour la stable
       if (!is_object($info)) {
         $info = new propluviaCmd();
         $info->setName(__('id zone SUP', __FILE__));
@@ -288,7 +288,7 @@ class propluvia extends eqLogic {
 
     //commandes pour la zone d'eau souterraine
     if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'id_zone_sou');		//----> ne sert pas, à supprimer pour la stable
+      $info = $this->getCmd(null, 'id_zone_sou');		//----> ne sert pas, à suprimer pour la stable
       if (!is_object($info)) {
         $info = new propluviaCmd();
         $info->setName(__('id zone SOU', __FILE__));
@@ -390,8 +390,8 @@ class propluvia extends eqLogic {
   }
 
   public function pullpropluvia() {
-    $date = date('d/m/Y');
-	$dateFormat = date('d/m/Y', strtotime($date));   							//----> ne sert pas, à supprimer pour la stable
+    $date = date('Y-m-d');
+	$dateFormat = date('d/m/Y');
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     $typeInfo = $this->getConfiguration('typeInfo');
     $typeRestriction = $this->getConfiguration('typeRestriction');
@@ -429,11 +429,11 @@ class propluvia extends eqLogic {
       $this->setConfiguration('lastActuPropluvia', time())->save();
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
-        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
+        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
 
         // mise à jour des commandes
-        $this->checkAndUpdateCmd('departement', ''); //si pas d'arrêté, le json ne contient pas le code département donc pas possible de l'afficher -> voir pour le récupérer d'ailleurs
-        $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$date);
+        $this->checkAndUpdateCmd('departement', substr($codeInseeCommune, 0, 2)); //si pas d'arrêté, le json ne contient pas le code département donc pas possible de l'afficher -> voir pour le récupérer d'ailleurs
+        $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
         $this->checkAndUpdateCmd('id_arrete', 0);
         $this->checkAndUpdateCmd('date_debut', '');
         $this->checkAndUpdateCmd('date_fin', '');
