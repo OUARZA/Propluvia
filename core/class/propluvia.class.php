@@ -158,7 +158,7 @@ class propluvia extends eqLogic {
     $info->setOrder(4);
     $info->save();
 
-    $info = $this->getCmd(null, 'id_arrete');		//----> ne sert pas, à suprimer pour la stable
+    $info = $this->getCmd(null, 'id_arrete');		//----> ne sert pas, à supprimer pour la stable
     if (!is_object($info)) {
       $info = new propluviaCmd();
       $info->setName(__('id arrêté', __FILE__));
@@ -197,7 +197,7 @@ class propluvia extends eqLogic {
 
     //commandes pour la zone d'eau superficielle
     if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'id_zone_sup');		//----> ne sert pas, à suprimer pour la stable
+      $info = $this->getCmd(null, 'id_zone_sup');		//----> ne sert pas, à supprimer pour la stable
       if (!is_object($info)) {
         $info = new propluviaCmd();
         $info->setName(__('id zone SUP', __FILE__));
@@ -288,7 +288,7 @@ class propluvia extends eqLogic {
 
     //commandes pour la zone d'eau souterraine
     if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'id_zone_sou');		//----> ne sert pas, à suprimer pour la stable
+      $info = $this->getCmd(null, 'id_zone_sou');		//----> ne sert pas, à supprimer pour la stable
       if (!is_object($info)) {
         $info = new propluviaCmd();
         $info->setName(__('id zone SOU', __FILE__));
@@ -391,7 +391,7 @@ class propluvia extends eqLogic {
 
   public function pullpropluvia() {
     $date = date('d/m/Y');
-	$dateFormat = date('d/m/Y', strtotime($date));   							//----> ne sert pas, à suprimer pour la stable
+	$dateFormat = date('d/m/Y', strtotime($date));   							//----> ne sert pas, à supprimer pour la stable
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     $typeInfo = $this->getConfiguration('typeInfo');
     $typeRestriction = $this->getConfiguration('typeRestriction');
