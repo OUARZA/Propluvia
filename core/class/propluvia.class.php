@@ -424,6 +424,8 @@ class propluvia extends eqLogic {
     if(!is_array($jsonData)){
     	log::add(__CLASS__, 'error', 'le site \'https://eau.api.agriculture.gouv.fr\' renvoie une erreur ou n\'est pas accessible');        
     } else {      
+      //sauvegarde date et heure de récupérations des info Propluvia
+      $this->setConfiguration('lastActuPropluvia', time())->save();
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
         log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
@@ -547,96 +549,96 @@ class propluvia extends eqLogic {
 
   /** Permet de modifier l'affichage du widget (également utilisable par les commandes)*/
   public function toHtml($_version = 'dashboard') {
-    $typeRestriction = $this->getConfiguration('typeRestriction'); //récupération de la valeur pour afficher le bon template
-  /* 
-  // a n'utiliser que si dans la config de l'eqLogic, on laisse le choix a l'user d'utiliser le widget du plugin, ou les widget par défaut du core
-   if ($this->getConfiguration('widgetTemplate') != 1) {
-    return parent::toHtml($_version);
-  } 
-  */
-  $this->emptyCacheWidget(); // a utiliser qu'en environnement de dev.
-  $replace = $this->preToHtml($_version); // initialise les tag standards : #id#, #name# ...
-  
-  if (!is_array($replace)) {
-    return $replace;
-  }
-  
-  $version = jeedom::versionAlias($_version);
-    
+  	$typeRestriction = $this->getConfiguration('typeRestriction'); //récupération de la valeur pour afficher le bon template
+    /* 
+    // a n'utiliser que si dans la config de l'eqLogic, on laisse le choix a l'user d'utiliser le widget du plugin, ou les widget par défaut du core
+     if ($this->getConfiguration('widgetTemplate') != 1) {
+      return parent::toHtml($_version);
+    } 
+    */
+    $this->emptyCacheWidget(); // a utiliser qu'en environnement de dev.
+    $replace = $this->preToHtml($_version); // initialise les tag standards : #id#, #name# ...
 
-foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type info
-  $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd(); //initialise les tag en fonction du logicalId
-//gestion de l'affichage de l'échelle en couleurs
-  $replace['#nom_restriction_sou_N1#'] = '';
-  $replace['#nom_restriction_sou_N2#'] = '';
-  $replace['#nom_restriction_sou_N3#'] = '';
-  $replace['#nom_restriction_sou_N4#'] = '';
-  $replace['#nom_restriction_sou_N5#'] = '';
-    
-    switch ($replace['#niveau_restriction_sou#']) {
-      case 0:
-        $replace['#nom_restriction_sou_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 1:
-        $replace['#nom_restriction_sou_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 3:
-        $replace['#nom_restriction_sou_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 4:
-        $replace['#nom_restriction_sou_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 5:
-        $replace['#nom_restriction_sou_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
+    if (!is_array($replace)) {
+      return $replace;
     }
-  
-  $replace['#nom_restriction_sup_N1#'] = '';
-  $replace['#nom_restriction_sup_N2#'] = '';
-  $replace['#nom_restriction_sup_N3#'] = '';
-  $replace['#nom_restriction_sup_N4#'] = '';
-  $replace['#nom_restriction_sup_N5#'] = '';
-  
-  switch ($replace['#niveau_restriction_sup#']) {
-      case 0:
-        $replace['#nom_restriction_sup_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 1:
-        $replace['#nom_restriction_sup_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 3:
-        $replace['#nom_restriction_sup_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 4:
-        $replace['#nom_restriction_sup_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
-      case 5:
-        $replace['#nom_restriction_sup_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
-        break;
+
+    $version = jeedom::versionAlias($_version);
+
+    foreach ($this->getCmd('info') as $cmd) { // recherche toute les cmd de type info
+      $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd(); //initialise les tag en fonction du logicalId
+    //gestion de l'affichage de l'échelle en couleurs
+      $replace['#nom_restriction_sou_N1#'] = '';
+      $replace['#nom_restriction_sou_N2#'] = '';
+      $replace['#nom_restriction_sou_N3#'] = '';
+      $replace['#nom_restriction_sou_N4#'] = '';
+      $replace['#nom_restriction_sou_N5#'] = '';
+
+      switch ($replace['#niveau_restriction_sou#']) {
+        case 0:
+          $replace['#nom_restriction_sou_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 1:
+          $replace['#nom_restriction_sou_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 3:
+          $replace['#nom_restriction_sou_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 4:
+          $replace['#nom_restriction_sou_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 5:
+          $replace['#nom_restriction_sou_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+      }
+
+      $replace['#nom_restriction_sup_N1#'] = '';
+      $replace['#nom_restriction_sup_N2#'] = '';
+      $replace['#nom_restriction_sup_N3#'] = '';
+      $replace['#nom_restriction_sup_N4#'] = '';
+      $replace['#nom_restriction_sup_N5#'] = '';
+
+      switch ($replace['#niveau_restriction_sup#']) {
+        case 0:
+          $replace['#nom_restriction_sup_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 1:
+          $replace['#nom_restriction_sup_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 3:
+          $replace['#nom_restriction_sup_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 4:
+          $replace['#nom_restriction_sup_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 5:
+          $replace['#nom_restriction_sup_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+      }
+
+    }    
+    $lastActuPropluvia = $this->getConfiguration('lastActuPropluvia','');
+    $replace['#lastActuPropluvia#'] = 'Données PROPLUVIA importées le '.date('d/m/Y à H:i', $lastActuPropluvia);
+
+    /* plusieurs lignes séparées pour comprendre */
+    if ($typeRestriction == 'sup') {
+    $getTemplate = getTemplate('core', $version, 'propluvia_sup.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+    $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+    $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+    return $postToHtml; // renvoie le code du template du widget.
     }
-  
-}    
-  
-  
-  /* plusieurs lignes séparées pour comprendre */
-  if ($typeRestriction == 'sup') {
-  $getTemplate = getTemplate('core', $version, 'propluvia_sup.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
-  $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
-  $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
-  return $postToHtml; // renvoie le code du template du widget.
-  }
-  if ($typeRestriction == 'sou') {
-  $getTemplate = getTemplate('core', $version, 'propluvia_sou.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
-  $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
-  $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
-  return $postToHtml; // renvoie le code du template du widget.
-  }
-  if ($typeRestriction == 'all') {
-  $getTemplate = getTemplate('core', $version, 'propluvia_all.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
-  $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
-  $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
-  return $postToHtml; // renvoie le code du template du widget.
-  }
+    if ($typeRestriction == 'sou') {
+    $getTemplate = getTemplate('core', $version, 'propluvia_sou.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+    $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+    $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+    return $postToHtml; // renvoie le code du template du widget.
+    }
+    if ($typeRestriction == 'all') {
+    $getTemplate = getTemplate('core', $version, 'propluvia_all.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+    $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+    $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+    return $postToHtml; // renvoie le code du template du widget.
+    }
   
   /* 
   // Ces 4 lignes ci-dessus peuvent être concaténer comme ceci : 
