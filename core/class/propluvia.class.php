@@ -158,7 +158,7 @@ class propluvia extends eqLogic {
     $info->setOrder(4);
     $info->save();
 
-    $info = $this->getCmd(null, 'id_arrete');
+    $info = $this->getCmd(null, 'id_arrete');		//----> ne sert pas, à suprimer pour la stable
     if (!is_object($info)) {
       $info = new propluviaCmd();
       $info->setName(__('id arrêté', __FILE__));
@@ -197,7 +197,7 @@ class propluvia extends eqLogic {
 
     //commandes pour la zone d'eau superficielle
     if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'id_zone_sup');
+      $info = $this->getCmd(null, 'id_zone_sup');		//----> ne sert pas, à suprimer pour la stable
       if (!is_object($info)) {
         $info = new propluviaCmd();
         $info->setName(__('id zone SUP', __FILE__));
@@ -288,7 +288,7 @@ class propluvia extends eqLogic {
 
     //commandes pour la zone d'eau souterraine
     if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'id_zone_sou');
+      $info = $this->getCmd(null, 'id_zone_sou');		//----> ne sert pas, à suprimer pour la stable
       if (!is_object($info)) {
         $info = new propluviaCmd();
         $info->setName(__('id zone SOU', __FILE__));
@@ -390,8 +390,8 @@ class propluvia extends eqLogic {
   }
 
   public function pullpropluvia() {
-    $date = date('Y-m-d');
-	$dateFormat = date('d/m/Y', strtotime($date));
+    $date = date('d/m/Y');
+	$dateFormat = date('d/m/Y', strtotime($date));   							//----> ne sert pas, à suprimer pour la stable
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     $typeInfo = $this->getConfiguration('typeInfo');
     $typeRestriction = $this->getConfiguration('typeRestriction');
@@ -402,6 +402,7 @@ class propluvia extends eqLogic {
     }
     $trans = array(" " => "_", "é" => "e", "è" => "e");
     $eqName = $this->getName();
+    log::add(__CLASS__, 'debug', '');
     log::add(__CLASS__, 'debug', '*********** PROPLUVIA ['.$eqName.'] ***********');
     
     //récupération nom commune
@@ -428,11 +429,11 @@ class propluvia extends eqLogic {
       $this->setConfiguration('lastActuPropluvia', time())->save();
       //vérifie qu'un arrêté existe
       if ($jsonData['message'] != NULL) {
-        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
+        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$date. ' pour la commune '.$nomCommune);
 
         // mise à jour des commandes
         $this->checkAndUpdateCmd('departement', ''); //si pas d'arrêté, le json ne contient pas le code département donc pas possible de l'afficher -> voir pour le récupérer d'ailleurs
-        $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
+        $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$date);
         $this->checkAndUpdateCmd('id_arrete', 0);
         $this->checkAndUpdateCmd('date_debut', '');
         $this->checkAndUpdateCmd('date_fin', '');
@@ -444,7 +445,8 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('nom_zone_sou', '');
         $this->checkAndUpdateCmd('niveau_restriction_sou', 0);
         $this->checkAndUpdateCmd('nom_restriction_sou', '');      
-        $this->checkAndUpdateCmd('editorial_zone_sou', '');      
+        $this->checkAndUpdateCmd('editorial_zone_sou', '');
+        $this->setConfiguration('urlPdf', '')->save();
 
       } else {
         $codeInseeDepartement = $jsonData[0]['codeInseeDepartement'];
@@ -452,6 +454,7 @@ class propluvia extends eqLogic {
         $dateFinValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateFinValiditeArrete']));
         $numeroArrete = $jsonData[0]['numeroArrete'];
         $idArrete = $jsonData[0]['idArrete'];
+        $urlPdf = 'https://eau.api.agriculture.gouv.fr/apis/propluvia/file/pdf/'.$jsonData[0]['fdCdn'];
         //mise à jour des commandes et log avec info arrêté
       	log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
         log::add(__CLASS__, 'debug', 'id arrêté              : '.$idArrete);
@@ -459,6 +462,8 @@ class propluvia extends eqLogic {
         log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
         log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
         log::add(__CLASS__, 'debug', 'Commune                : '.$nomCommune);
+        log::add(__CLASS__, 'debug', 'url pdf arrêté         : '.$urlPdf);
+
 
         $this->checkAndUpdateCmd('departement', $codeInseeDepartement);
         $this->checkAndUpdateCmd('numero_arrete', $numeroArrete);
@@ -466,9 +471,10 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('date_debut', $dateDebutValiditeArrete);
         $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
         $this->checkAndUpdateCmd('commune', $nomCommune);
+        $this->setConfiguration('urlPdf', $urlPdf)->save();
         
         //effacement des commandes zones avant mise à jour
-        $this->checkAndUpdateCmd('id_zone_sup', '');
+      /*$this->checkAndUpdateCmd('id_zone_sup', '');
         $this->checkAndUpdateCmd('nom_zone_sup', 'Aucune zone SUP trouvée');
         $this->checkAndUpdateCmd('niveau_restriction_sup', 0);
         $this->checkAndUpdateCmd('nom_restriction_sup', '');      
@@ -477,7 +483,7 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('nom_zone_sou', 'Aucune zone SOU trouvée');
         $this->checkAndUpdateCmd('niveau_restriction_sou',0);
         $this->checkAndUpdateCmd('nom_restriction_sou', '');      
-        $this->checkAndUpdateCmd('editorial_zone_sou', '');   
+        $this->checkAndUpdateCmd('editorial_zone_sou', '');   */
 
         //balayage des zones
         foreach ($jsonData[0]['restrictions'] as $value=>$jsonKey) {       
@@ -618,7 +624,9 @@ class propluvia extends eqLogic {
 
     }    
     $lastActuPropluvia = $this->getConfiguration('lastActuPropluvia','');
-    $replace['#lastActuPropluvia#'] = 'Données PROPLUVIA importées le '.date('d/m/Y à H:i', $lastActuPropluvia);
+    $replace['#lastActuPropluvia#'] = 'Données PROPLUVIA importées le '.date('d/m/Y à H:i:s', $lastActuPropluvia);
+    $urlPdf = $this->getConfiguration('urlPdf','');
+    $replace['#urlPdf#'] = $urlPdf;
 
     /* plusieurs lignes séparées pour comprendre */
     if ($typeRestriction == 'sup') {
