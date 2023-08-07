@@ -402,7 +402,7 @@ class propluvia extends eqLogic {
     }
     $trans = array(" " => "_", "é" => "e", "è" => "e");
     $eqName = $this->getName();
-    log::add(__CLASS__, 'debug', '');
+    log::add(__CLASS__, 'debug', ' ');
     log::add(__CLASS__, 'debug', '*********** PROPLUVIA ['.$eqName.'] ***********');
     
     //récupération nom commune
