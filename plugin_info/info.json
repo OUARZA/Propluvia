@@ -1,29 +1,20 @@
 {
 	"id" : "propluvia",
 	"name" : "Propluvia",
-	"specialAttributes" : {
-		"object" : {
-			"toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "input"},
-			"toto2" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial number"},"type" : "number"}
-		},
-		"user" : {
-			"toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "select","values" : [{"value" : "1", "name" : "valeur 1"},{"value" : "plop", "name" : "valeur plop"}]}
-		}
-	},
 	"description" : {
 		"fr_FR": "Plugin permettant de récupérer les informations du site Propluvia."
 	},
 	"licence" : "AGPL",
-	"author" : "OUARZA, elmer69",
+	"author" : "elmer69 & OUARZA",
 	"require" : "3.3.39",
 	"category" : "weather",
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://github.com/OUARZA/Propluvia/blob/main/docs/#language#/changelog.md",
-	"documentation" : "https://github.com/OUARZA/Propluvia/blob/main/docs/#language#/index.md",
-	"changelog_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/changelog",
-	"documentation_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/",
+	"changelog" : "https://github.com/OUARZA/Propluvia/blob/stable/docs/#language#/changelog.md",
+	"documentation" : "https://github.com/OUARZA/Propluvia/blob/stable/docs/#language#/index.md",
+	"changelog_beta" : "https://github.com/OUARZA/Propluvia/blob/beta/docs/#language#/changelog.md",
+	"documentation_beta" : "https://github.com/OUARZA/Propluvia/blob/beta/docs/#language#/index.md",
 	"link" : {
 		"forum":"Lien vers le forum",
 		"video" : "Lien vers une video"
