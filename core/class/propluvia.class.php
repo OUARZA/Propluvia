@@ -114,7 +114,7 @@ class propluvia extends eqLogic {
       $nomCommune = $jsonData['features']['0']['properties']['nom'];
       $this->setConfiguration('commune', $nomCommune);
     } else {
-      log::add(__CLASS__, 'error', 'Code INSEE de commune ('.$codeInseeCommune.') ivalide');
+      log::add(__CLASS__, 'error', 'Code INSEE de commune ('.$codeInseeCommune.') invalide');
     }
   }
 
@@ -413,7 +413,7 @@ class propluvia extends eqLogic {
       $nomCommune = $jsonData['features']['0']['properties']['nom'];
     } else {
       $nomCommune = 'commune invalide';
-      log::add(__CLASS__, 'error', 'Code INSEE de commune ('.$codeInseeCommune.') ivalide');
+      log::add(__CLASS__, 'error', 'Code INSEE de commune ('.$codeInseeCommune.') invalide');
     }
 
     //récupération info arrêté
