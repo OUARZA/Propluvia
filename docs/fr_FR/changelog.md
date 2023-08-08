@@ -15,6 +15,9 @@
 # 06/08/2023
 - Suppression des commandes spécifiques inutiles
 
+# 27/10/2023
+- Création du widget par @Phpvarious
+
 # 15/10/2022
 - Création du plugin par @elmer69
 
