@@ -4,6 +4,11 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 08/08/2023
+- Ajout du lien hypertexte vers arrêté en PDF
+- Ajout du n° département quand il n'y a pas d’arrêté trouvé
+- Corrections mineures du code
+
 # 07/08/2023
 - Ajout de la date et heure de récupération des informations Propluvia 
 
