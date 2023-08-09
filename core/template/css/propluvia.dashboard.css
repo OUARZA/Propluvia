@@ -26,8 +26,11 @@
 	.tableau td {
 		padding:2px;
      	background-color: #C9EBF8 !important;
-      	
+    	}
+	.fa-mixer{
+   		color: black;
 	}
-.fa-mixer{
-   color: black;
-}
+    .lien-arrete {
+        color: black;
+        text-decoration: underline;
+    }
