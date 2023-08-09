@@ -20,8 +20,19 @@
       	<td>Commune : #commune# (#departement#)</td>
 	</tr>
 	<tr>
-      	<td><i class='fas fa-pen'></i></td>
-		<td>Arrêté : n° <a href="#urlPdf#">#numero_arrete#</a></td>
+		<td><i class='fas fa-pen'></i></td>
+		<td id="arreteCell">
+			<script>
+				var urlPdf = "#urlPdf#";
+				var numeroArrete = "#numero_arrete#";
+
+				if (urlPdf !== '') {
+					document.getElementById("arreteCell").innerHTML = "Arrêté : n° <a href='" + urlPdf + "' target='_blank' class='lien-arrete'>" + numeroArrete + "</a>";
+				} else {
+					document.getElementById("arreteCell").innerHTML = "Arrêté : " + numeroArrete;
+				}
+			</script>
+		</td>
 	</tr>
     <tr>
       	<td><i class='fas fa-angle-right'></i></td>
