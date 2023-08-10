@@ -194,7 +194,19 @@ class propluvia extends eqLogic {
     $info->setSubType('string');
     $info->setOrder(6);
     $info->save();
-
+    
+    $info = $this->getCmd(null, 'urlPdf');
+    if (!is_object($info)) {
+      $info = new propluviaCmd();
+      $info->setName(__('Url arrêté en pdf', __FILE__));
+    }
+    $info->setLogicalId('urlPdf');
+    $info->setEqLogic_id($this->getId());
+    $info->setType('info');
+    $info->setSubType('string');
+    $info->setOrder(20);
+    $info->save();
+    
     //commandes pour la zone d'eau superficielle
     if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
       $info = $this->getCmd(null, 'id_zone_sup');		//----> ne sert pas, à suprimer pour la stable
@@ -446,8 +458,8 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('niveau_restriction_sou', 0);
         $this->checkAndUpdateCmd('nom_restriction_sou', '');      
         $this->checkAndUpdateCmd('editorial_zone_sou', '');
-        $this->setConfiguration('urlPdf', '')->save();
-
+        $this->checkAndUpdateCmd('urlPdf', '');
+        
       } else {
         $codeInseeDepartement = $jsonData[0]['codeInseeDepartement'];
         $dateDebutValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateDebutValiditeArrete']));
@@ -464,15 +476,14 @@ class propluvia extends eqLogic {
         log::add(__CLASS__, 'debug', 'Commune                : '.$nomCommune);
         log::add(__CLASS__, 'debug', 'url pdf arrêté         : '.$urlPdf);
 
-
         $this->checkAndUpdateCmd('departement', $codeInseeDepartement);
         $this->checkAndUpdateCmd('numero_arrete', $numeroArrete);
         $this->checkAndUpdateCmd('id_arrete', $idArrete);
         $this->checkAndUpdateCmd('date_debut', $dateDebutValiditeArrete);
         $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
         $this->checkAndUpdateCmd('commune', $nomCommune);
-        $this->setConfiguration('urlPdf', $urlPdf)->save();
-        
+        $this->checkAndUpdateCmd('urlPdf', $urlPdf);
+                
         //effacement des commandes zones avant mise à jour
       /*$this->checkAndUpdateCmd('id_zone_sup', '');
         $this->checkAndUpdateCmd('nom_zone_sup', 'Aucune zone SUP trouvée');
@@ -625,8 +636,8 @@ class propluvia extends eqLogic {
     }    
     $lastActuPropluvia = $this->getConfiguration('lastActuPropluvia','');
     $replace['#lastActuPropluvia#'] = 'Données PROPLUVIA importées le '.date('d/m/Y à H:i:s', $lastActuPropluvia);
-    $urlPdf = $this->getConfiguration('urlPdf','');
-    $replace['#urlPdf#'] = $urlPdf;
+    //$urlPdf = $this->getConfiguration('urlPdf','');
+    //$replace['#urlPdf#'] = $urlPdf;
 
     /* plusieurs lignes séparées pour comprendre */
     if ($typeRestriction == 'sup') {
