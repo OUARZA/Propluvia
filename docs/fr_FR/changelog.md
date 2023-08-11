@@ -4,6 +4,9 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 11/08/2023
+- Modification des couleurs du lien.
+
 # 10/08/2023
 - Le lien est maintenant contenu dans la commande info "Url arrêté en pdf". Cette commande sera créée en cliquant sur le bouton sauvegarder sur la page de l'équipement.
 - Dans le widget si pas d'arrêté valide, pas de lien généré
