@@ -419,9 +419,23 @@ class propluvia extends eqLogic {
     
     //récupération nom commune
     $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
-    $request_http = new com_http($url);
+    /*$request_http = new com_http($url);					//---------> à supprime pour la stable
     $request_http->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
-    $jsonData=json_decode(trim($request_http->exec()), true);
+    $jsonData=json_decode(trim($request_http->exec()), true);   */
+    
+    $ch = curl_init();										//---------> modification commande curl afin d'augmenter le timeoutc
+	curl_setopt($ch, CURLOPT_URL, $url);
+ 	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);   
+	curl_setopt($ch, CURLOPT_TIMEOUT, 15);         
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+	$response = curl_exec($ch);
+	curl_close($ch);
+  	$jsonData = json_decode($response, true);  
+    
     if(is_array($jsonData)){
       $nomCommune = $jsonData['features']['0']['properties']['nom'];
     } else {
@@ -431,9 +445,23 @@ class propluvia extends eqLogic {
 
     //récupération info arrêté
     $url = 'https://eau.api.agriculture.gouv.fr/apis/propluvia/arretes/'.$date.'/commune/'.$codeInseeCommune;
-    $request_http = new com_http($url);
+    /*$request_http = new com_http($url);					//---------> à supprime pour la stable
     $request_http->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
-    $jsonData=json_decode(trim($request_http->exec()), true);
+    $jsonData=json_decode(trim($request_http->exec()), true);*/
+   
+    $ch = curl_init();										//---------> modification commande curl afin d'augmenter le timeoutc
+	curl_setopt($ch, CURLOPT_URL, $url);
+ 	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);   
+	curl_setopt($ch, CURLOPT_TIMEOUT, 15);         
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+	$response = curl_exec($ch);
+	curl_close($ch);
+  	$jsonData = json_decode($response, true);  
+     
     if(!is_array($jsonData)){
     	log::add(__CLASS__, 'error', 'le site \'https://eau.api.agriculture.gouv.fr\' renvoie une erreur ou n\'est pas accessible');        
     } else {      
@@ -509,9 +537,23 @@ class propluvia extends eqLogic {
             if ( $jsonKey2['codeInseeCommune'] == $codeInseeCommune) {
               //recupération info détaillé sur le niveau d'alerte
               $url_legende = 'https://eau.api.agriculture.gouv.fr/apis/propluvia/editoriaux/?idEditorial=legende_'.strtr(strtolower($nomNiveau),$trans).$typeInfo;   
-              $request_http_legende = new com_http($url_legende);
+              /*$request_http_legende = new com_http($url_legende);					//---------> à supprime pour la stable
               $request_http_legende->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
-              $legende=json_decode(trim($request_http_legende->exec()), true);
+              $legende=json_decode(trim($request_http_legende->exec()), true);*/
+              
+              $ch = curl_init();										//---------> modification commande curl afin d'augmenter le timeoutc
+              curl_setopt($ch, CURLOPT_URL, $url_legende);
+              curl_setopt($ch, CURLOPT_HEADER, false);
+              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+              curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);   
+              curl_setopt($ch, CURLOPT_TIMEOUT, 15);         
+              curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+              curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+              curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+              $response = curl_exec($ch);
+              curl_close($ch);
+              $legende = json_decode($response, true);  
+            
               if(is_array($legende)){
                   $contenuEditorial = $legende[0]['contenuEditorial'];
               } else {
