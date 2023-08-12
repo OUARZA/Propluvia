@@ -4,6 +4,9 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 12/08/2023
+- Ajout d'un timeout de 15 secondes lorsque les données sont lourdes à télécharger ou lorsque la connexion n'est pas suffisamment performante pour télécharger les données. 
+
 # 11/08/2023
 - Modification des couleurs du lien.
 
