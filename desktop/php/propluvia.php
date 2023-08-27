@@ -160,11 +160,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						<div class="col-lg-6">
 							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
 							
-                            				<div class="form-group">
-								<label class="col-sm-3 control-label">{{Commune :}}</label>
-								<label class="col-sm-3 control-label"><?= $eqLogic ? $eqLogic->getConfiguration('commune') : ''; ?></label>
-							</div>
-                            
+                            	<div class="form-group">
+									<label class="col-sm-3 control-label">{{Département :}}</label>
+                                	<span class="eqLogicAttr label label-info" style="font-size:1em;cursor: default;" data-l1key="configuration" data-l2key="departement"></span>	
+                                </div>
+                                <div class="form-group">
+                                	<label class="col-sm-3 control-label">{{Commune :}}</label>
+                                	<span class="eqLogicAttr label label-info" style="font-size:1em;cursor: default;" data-l1key="configuration" data-l2key="commune"></span>												</div>
 						</div>
 					</fieldset>
 				</form>
