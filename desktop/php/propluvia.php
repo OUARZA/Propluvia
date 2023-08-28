@@ -162,11 +162,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							
                             	<div class="form-group">
 									<label class="col-sm-3 control-label">{{Département :}}</label>
-                                	<span class="eqLogicAttr label label-info" style="font-size:1em;cursor: default;" data-l1key="configuration" data-l2key="departement"></span>	
+                                	<span class="col-sm-3 control-label" style="font-size:1em;text-align: left;" data-l1key="configuration" data-l2key="departement"></span>	
                                 </div>
                                 <div class="form-group">
                                 	<label class="col-sm-3 control-label">{{Commune :}}</label>
-                                	<span class="eqLogicAttr label label-info" style="font-size:1em;cursor: default;" data-l1key="configuration" data-l2key="commune"></span>												</div>
+                                	<span class="col-sm-3 control-label" style="font-size:1em;text-align: left;" data-l1key="configuration" data-l2key="commune"></span>												</div>
 						</div>
 					</fieldset>
 				</form>
