@@ -4,6 +4,11 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 28/08/2023
+- Suppression de la taille fixe du Widget
+- Correction d'un bug sur l'affichage de la commune sur la page équipement
+- Ajout de l'affichage du nom du département de la commune sur la page équipement
+
 # 12/08/2023
 - Rallongement du timeout à 15 secondes, nécessaire lorsque les données sont lourdes à télécharger ou lorsque la connexion n'est pas suffisamment performante pour télécharger les données. 
 
