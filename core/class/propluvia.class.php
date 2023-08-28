@@ -98,21 +98,27 @@ class propluvia extends eqLogic {
 
   // Fonction exécutée automatiquement après la mise à jour de l'équipement
   public function postUpdate() {
+    /*$cmd = $this->getCmd(null, 'refresh'); //On recherche la commande refresh de l’équipement
+    if (is_object($cmd)) { //elle existe et on lance la commande
+      $cmd->execCmd();
+  	}*/
   }
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
   public function preSave() {
-    $this->setDisplay("width","670px");
-    $this->setDisplay("height","340px");
+    //$this->setDisplay("width","355px");
+    //$this->setDisplay("height","340px");
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     //récupération nom commune
-    $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
+    $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,departement';
     $request_http = new com_http($url);
     $request_http->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
     $jsonData=json_decode(trim($request_http->exec()), true);
     if(is_array($jsonData)){
-      $nomCommune = $jsonData['features']['0']['properties']['nom'];
+      $nomCommune = $jsonData['0']['nom'];
+      $nomDepartement = $jsonData['0']['departement']['nom'];
       $this->setConfiguration('commune', $nomCommune);
+      $this->setConfiguration('departement', $nomDepartement);
     } else {
       log::add(__CLASS__, 'error', 'Code INSEE de commune ('.$codeInseeCommune.') invalide');
     }
@@ -418,8 +424,8 @@ class propluvia extends eqLogic {
     log::add(__CLASS__, 'debug', '*********** PROPLUVIA ['.$eqName.'] ***********');
     
     //récupération nom commune
-    $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,contour&format=geojson&geometry=contour';
-    /*$request_http = new com_http($url);					//---------> à supprime pour la stable
+    $url = 'https://geo.api.gouv.fr/communes?code='.$codeInseeCommune.'&fields=code,nom,departement';
+    /*$request_http = new com_http($url);					//---------> à supprimer pour la stable
     $request_http->setCURLOPT_HTTPAUTH(CURLAUTH_DIGEST);
     $jsonData=json_decode(trim($request_http->exec()), true);   */
     
@@ -437,7 +443,7 @@ class propluvia extends eqLogic {
   	$jsonData = json_decode($response, true);  
     
     if(is_array($jsonData)){
-      $nomCommune = $jsonData['features']['0']['properties']['nom'];
+      $nomCommune = $jsonData['0']['nom'];
     } else {
       $nomCommune = 'commune invalide';
       log::add(__CLASS__, 'error', 'Code INSEE de commune ('.$codeInseeCommune.') invalide');
