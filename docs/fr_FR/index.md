@@ -19,18 +19,19 @@ Ce plugin permet de remonter les informations du site de l'information sécheres
 4. Configurer les paramètres généraux, puis dans les aramètres spécifiques, indiquer le code INSEE de la commune que vous souhaitez consulter. Indiquer quels types de restrictions vous souhaitez suivre (Eaux superficielles, Eaux sonterraines), ainsi que le type éditorial (Particulier, Profesionnel).  
 ![image](https://github.com/OUARZA/Propluvia/assets/34892335/ddf81407-3b43-45c3-b67f-301f38e4e514)
 
-### Notes  
-Restrictions spécifiques :  
-| Type | Description |
-| --- | --- |
-| Eaux superficielles | Les eaux superficielles ou eaux de surface regroupent les eaux des pluies, des sources et du ruissellement d'autres sources d'eau. Les eaux de surface cheminent toutes afin d'arriver à un plus grand plan d'eau, pour exemple, les rivières qui se jettent dans l'océan.[<sup>[1]</sup>](#notes-et-références) |
-| Eaux souterraines | Les eaux souterraines peuvent être résumées comme étant l'ensemble des eaux stockées en profondeur ou en dessous de la surface terrestre, saturant complètement les pores du sous-sol.[<sup>[2]</sup>](#notes-et-références) |
-
-Type éditorial :  
-| Type | Description |
-| --- | --- |
-| Particulier | Utilisation de l'eau à titre personnel (arrosage du jardin, des fleurs, piscine...) |
-| Profesionnel | Utilisation de l'eau à titre profesionnel (agriculteur...) |
+>**NOTE**
+>
+>Restrictions spécifiques :  
+>| Type | Description |
+>| --- | --- |
+>| Eaux superficielles | Les eaux superficielles ou eaux de surface regroupent les eaux des pluies, des sources et du ruissellement d'autres sources d'eau. Les eaux de surface cheminent toutes afin d'arriver à un plus grand plan d'eau, pour exemple, les rivières qui se jettent dans l'océan.[<sup>[1]</sup>](#notes-et-références) |
+>| Eaux souterraines | Les eaux souterraines peuvent être résumées comme étant l'ensemble des eaux stockées en profondeur ou en dessous de la surface terrestre, saturant complètement les pores du sous-sol.[<sup>[2]</sup>](#notes-et-références) |
+>
+>Type éditorial :  
+>| Type | Description |
+>| --- | --- |
+>| Particulier | Utilisation de l'eau à titre personnel (arrosage du jardin, des fleurs, piscine...) |
+>| Profesionnel | Utilisation de l'eau à titre profesionnel (agriculteur...) |
 
 5. Sauvegarder.
 
