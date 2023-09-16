@@ -4,6 +4,12 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 15/09/2023
+Nettoyage du code : il est donc demandé de procéder comme suit:
+1. Supprimer tous les équipements Propluvia
+2. Réaliser la mise à jour
+3. Recréer tous les équipements Propluvia
+
 # 28/08/2023
 - Suppression de la taille fixe du Widget
 - Correction d'un bug sur l'affichage de la commune sur la page équipement
