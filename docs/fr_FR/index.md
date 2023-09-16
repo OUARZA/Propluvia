@@ -19,8 +19,7 @@ Ce plugin permet de remonter les informations du site de l'information sécheres
 4. Configurer les paramètres généraux, puis dans les aramètres spécifiques, indiquer le code INSEE de la commune que vous souhaitez consulter. Indiquer quels types de restrictions vous souhaitez suivre (Eaux superficielles, Eaux sonterraines), ainsi que le type éditorial (Particulier, Profesionnel).  
 ![image](https://github.com/OUARZA/Propluvia/assets/34892335/ddf81407-3b43-45c3-b67f-301f38e4e514)
 
->**NOTE**
->
+>**NOTE**  
 >Restrictions spécifiques :  
 >| Type | Description |
 >| --- | --- |
