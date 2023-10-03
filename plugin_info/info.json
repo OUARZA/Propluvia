@@ -6,7 +6,7 @@
 	},
 	"licence" : "AGPL",
 	"author" : "elmer69 & OUARZA",
-	"require" : "3.3.39",
+	"require" : "4.3",
 	"category" : "weather",
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
@@ -31,12 +31,10 @@
 		"pt_PT"
 	],
 	"compatibility": [
-		"miniplus",
 		"smart",
 		"rpi",
 		"docker",
 		"diy",
-		"mobile",
 		"v4",
 		"atlas"
 	]
