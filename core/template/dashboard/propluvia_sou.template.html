@@ -21,7 +21,18 @@
 	</tr>
 	<tr>
       	<td><i class='fas fa-pen'></i></td>
-		<td>Arrêté : n°#numero_arrete#</td>
+        <td id="arreteCell">
+            <script>
+                var urlPdf = "#urlPdf#";
+                var numeroArrete = "#numero_arrete#";
+
+                if (urlPdf !== '') {
+            		document.getElementById("arreteCell").innerHTML = "Arrêté : n° <a href='" + urlPdf + "' target='_blank' class='lien-arrete'>" + numeroArrete + "</a>";
+                } else {
+                    document.getElementById("arreteCell").innerHTML = "Arrêté : " + numeroArrete;
+                }
+            </script>
+        </td>	
 	</tr>
     <tr>
       	<td><i class='fas fa-angle-right'></i></td>
@@ -70,29 +81,18 @@
 	</tr>
     <tr>
       	<td><i class='fas fa-angle-right'></i></td>
-		<td>Txt : #editorial_zone_sou#</td>
+		<td>Mesures : #editorial_zone_sou#</td>
 	</tr>
 	</tbody>
 </table>
       </div>
-<div>
-  OFF:
-#commune#
-#numero_arrete#
-#date_debut#
-#date_fin#
-#nom_zone_sup#
-#nom_restriction_sup#
-#niveau_restriction_sup#
-#editorial_zone_sup#
-#nom_zone_sou#
-#nom_restriction_sou#
-#niveau_restriction_sou#
-#editorial_zone_sou#
-      </div>
+  
+  <div style="font-size: 10px; font-style: italic; text-align:left;margin-left: 5px">
+	#lastActuPropluvia#
+  </div>
+
     </center>
   </div>
-  #divGraphInfo#
   <script>
 //    var eqLogic = $('.eqLogic[data-eqLogic_uid=#uid#]')
 //    var eqlogic_height = eqLogic.height()
