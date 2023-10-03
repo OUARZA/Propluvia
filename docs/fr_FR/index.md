@@ -3,10 +3,7 @@
 Ce plugin permet de remonter les informations du site de l'information sécheresse du Gouvernement [**Propluvia**](https://propluvia.developpement-durable.gouv.fr/propluviapublic/recherche-particulier) via l'API du site https://eau.api.agriculture.gouv.fr.
 
 ## Installation
-1. ~~Le plugin s'installe comme n'importe quel autre plugin sur Jeedom.~~<br/>
-1. Installation via Github en master (stable) ou beta.<br/>
-![image](https://github.com/OUARZA/Propluvia/assets/34892335/97107a01-c29e-48a7-bd77-9ca6cb0f65e9)
-
+1. Le plugin s'installe comme n'importe quel autre plugin sur Jeedom via le Market.<br/>
 
 ## Configuration
 1. Une fois installé et activé, sur la page de configuration, vous pouvez définir l'heure à laquelle le plugin ira chercher les information.<br/>
