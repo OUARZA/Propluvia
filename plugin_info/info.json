@@ -2,7 +2,7 @@
 	"id" : "propluvia",
 	"name" : "Propluvia",
 	"description" : {
-		"fr_FR": "Ce plugin permet de remonter les informations du site de l'information sécheresse du Gouvernement https://propluvia.developpement-durable.gouv.fr/ via l'API du site https://eau.api.agriculture.gouv.fr."
+		"fr_FR": "Ce plugin permet de remonter les informations du site de l'information sécheresse du Gouvernement <a href="https://propluvia.developpement-durable.gouv.fr/">Propluvia</a> via l'API du site https://eau.api.agriculture.gouv.fr."
 	},
 	"licence" : "AGPL",
 	"author" : "elmer69 & OUARZA",
