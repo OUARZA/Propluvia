@@ -16,7 +16,7 @@
 	"changelog_beta" : "https://github.com/OUARZA/Propluvia/blob/beta/docs/#language#/changelog.md",
 	"documentation_beta" : "https://github.com/OUARZA/Propluvia/blob/beta/docs/#language#/index.md",
 	"link" : {
-		"forum":"https://community.jeedom.com/t/propluvia-integre-a-jeedom/88402/73?u=ouarza",
+		"forum":"https://community.jeedom.com/tag/plugin-propluvia",
 		"video" : "Lien vers une video"
 	},
 	"language": [
