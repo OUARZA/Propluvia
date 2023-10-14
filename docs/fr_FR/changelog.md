@@ -4,8 +4,12 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 14/10/2023
+- Suppression du jQuery dans le template pour commencer à rendre le plugin compatible Jeedom v4.4 (merci [@Piug](https://community.jeedom.com/u/piug))
+- Ajout d'un cron minute.
+
 # 16/09/2023
-Nettoyage du code : il est donc demandé de procéder comme suit:
+- Nettoyage du code : il est donc demandé de procéder comme suit:
 1. Supprimer tous les équipements Propluvia
 2. Réaliser la mise à jour
 3. Recréer tous les équipements Propluvia
@@ -39,10 +43,10 @@ Nettoyage du code : il est donc demandé de procéder comme suit:
 - Suppression des commandes spécifiques inutiles
 
 # 27/10/2023
-- Création du widget par @Phpvarious
+- Création du widget par [@Phpvarious](https://community.jeedom.com/u/Phpvarious)
 
 # 15/10/2022
-- Création du plugin par @elmer69
+- Création du plugin par [@elmer69](https://community.jeedom.com/u/elmer69)
 
 # 11/08/2022
 - Création de la structure du plugin
