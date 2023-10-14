@@ -43,14 +43,14 @@ class propluvia extends eqLogic {
   /*
   * Fonction exécutée automatiquement toutes les minutes par Jeedom */  
   public static function cron() {
-  	$cronConfMinute = config::byKey('cronConfMinute', __CLASS__);
-  	$cronConfHeure = config::byKey('cronConfHeure', __CLASS__);
-	if (empty($cronConfMinute) || empty($cronConfHeure)) {
+		$cronConfMinute = config::byKey('cronConfMinute', __CLASS__);
+		$cronConfHeure = config::byKey('cronConfHeure', __CLASS__);
+		if (empty($cronConfMinute) || empty($cronConfHeure)) {
       log::add(__CLASS__, 'error', 'L\'heure de relevé n\'a pas été correctement configurée dans la page de configuration du plugin');
       return;
     }
-    $cronConfHeureEtMinute = str_pad($cronConfHeure, 2, '0', STR_PAD_LEFT) . ':' . str_pad($cronConfMinute, 2, '0', STR_PAD_LEFT);
-    if (date('G:i') != $cronConfHeureEtMinute) return;
+		$cronConfHeureEtMinute = str_pad($cronConfHeure, 2, '0', STR_PAD_LEFT) . ':' . str_pad($cronConfMinute, 2, '0', STR_PAD_LEFT);
+		if (date('G:i') != $cronConfHeureEtMinute) return;
  
     foreach (eqLogic::byType(__CLASS__, true) as $propluvia) {
       $propluvia->pullpropluvia();
