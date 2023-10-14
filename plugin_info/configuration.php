@@ -30,21 +30,21 @@ if (!isConnect()) {
       </label>
       <div class="col-md-1">
       	<select class="configKey form-control" data-l1key="cronConfHeure">
-        	<?php
-            	for ($heure=0; $heure<24; $heure++) {
-                	echo '<option value="'.$heure.'">'.$heure.'h</option>';
-                }
-            ?>    
-		</select>
+          <?php
+          for ($heure=0; $heure<24; $heure++) {
+            echo '<option value="'.$heure.'">'.$heure.'h</option>';
+          }
+		  ?>
+        </select>
       </div>
       <div class="col-md-1">
-      	<select class="configKey form-control" data-l1key="cronConfMinute">
-        	<?php
-            	for ($minute=0; $minute<60; $minute++) {
-                	echo '<option value="'.$minute.'">'.$minute.'min</option>';
-                }
+        <select class="configKey form-control" data-l1key="cronConfMinute">
+           	<?php
+            for ($minute=0; $minute<60; $minute++) {
+              echo '<option value="'.$minute.'">'.$minute.'min</option>';
+            }
             ?>    
-		     </select>
+		</select>
       </div>
     </div>
   </fieldset>
