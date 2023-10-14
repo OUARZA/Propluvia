@@ -143,11 +143,11 @@
 //    eqLogic.find('.propluviaUnite, .propluviaTitleIcon').css('font-size', (eqlogic_height * 0.04) + 'px')
     
     if ('#refresh_id#' != '') {
-      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
-        jeedom.cmd.execute({id: '#refresh_id#'})
-      })
+      document.querySelector('.eqLogic[data-eqLogic_uid=#uid#] .refresh').addEventListener("click", (event) => {
+        jeedom.cmd.execute({id: '#refresh_id#'});
+      });
     } else {
-      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove()
+      document.querySelector('.eqLogic[data-eqLogic_uid=#uid#] .refresh').classList.remove("refresh");
     }
   </script>
 </div>
