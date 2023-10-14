@@ -44,7 +44,7 @@ if (!isConnect()) {
               echo '<option value="'.$minute.'">'.$minute.'min</option>';
             }
             ?>    
-		</select>
+	</select>
       </div>
     </div>
   </fieldset>
