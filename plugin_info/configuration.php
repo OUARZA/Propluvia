@@ -29,7 +29,22 @@ if (!isConnect()) {
         <sup><i class="fas fa-question-circle tooltips" title="{{Heure à laquelle le plugin va chercher les informations}}"></i></sup>
       </label>
       <div class="col-md-1">
-        <input class="configKey form-control" data-l1key="cronHeure"/>
+      	<select class="configKey form-control" data-l1key="cronConfHeure">
+        	<?php
+            	for ($heure=0; $heure<24; $heure++) {
+                	echo '<option value="'.$heure.'">'.$heure.'h</option>';
+                }
+            ?>    
+		</select>
+      </div>
+      <div class="col-md-1">
+      	<select class="configKey form-control" data-l1key="cronConfMinute">
+        	<?php
+            	for ($minute=0; $minute<60; $minute++) {
+                	echo '<option value="'.$minute.'">'.$minute.'min</option>';
+                }
+            ?>    
+		     </select>
       </div>
     </div>
   </fieldset>
