@@ -34,12 +34,12 @@ if (!isConnect()) {
           for ($heure=0; $heure<24; $heure++) {
             echo '<option value="'.$heure.'">'.$heure.'h</option>';
           }
-		  ?>
+	?>
         </select>
       </div>
       <div class="col-md-1">
         <select class="configKey form-control" data-l1key="cronConfMinute">
-           	<?php
+           <?php
             for ($minute=0; $minute<60; $minute++) {
               echo '<option value="'.$minute.'">'.$minute.'min</option>';
             }
