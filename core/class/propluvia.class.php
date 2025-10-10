@@ -122,220 +122,18 @@ class propluvia extends eqLogic {
   public function postSave() {
     $typeRestriction = $this->getConfiguration('typeRestriction');
 
-    $info = $this->getCmd(null, 'departement');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Département', __FILE__));
+    foreach ($this->getCommonCommandDefinitions() as $logicalId => $definition) {
+      $this->createOrUpdateInfoCommand($logicalId, $definition);
     }
-    $info->setLogicalId('departement');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->setOrder(1);
-    $info->save();
 
-    $info = $this->getCmd(null, 'commune');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Commune', __FILE__));
-    }
-    $info->setLogicalId('commune');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->setOrder(2);
-    $info->save();
-
-    $info = $this->getCmd(null, 'numero_arrete');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Numéro arrêté', __FILE__));
-    }
-    $info->setLogicalId('numero_arrete');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->setOrder(4);
-    $info->save();
-  
-    $info = $this->getCmd(null, 'date_debut');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Date début arrêté', __FILE__));
-    }
-    $info->setLogicalId('date_debut');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->setOrder(5);
-    $info->save();
-
-    $info = $this->getCmd(null, 'date_fin');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Date fin arrêté', __FILE__));
-    }
-    $info->setLogicalId('date_fin');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->setOrder(6);
-    $info->save();
-    
-    $info = $this->getCmd(null, 'urlPdf');
-    if (!is_object($info)) {
-      $info = new propluviaCmd();
-      $info->setName(__('Url arrêté en pdf', __FILE__));
-    }
-    $info->setLogicalId('urlPdf');
-    $info->setEqLogic_id($this->getId());
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->setOrder(7);
-    $info->save();
-    
-    //commandes pour la zone d'eau superficielle
-    if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'nom_zone_sup');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Nom zone SUP', __FILE__));
-      }
-      $info->setLogicalId('nom_zone_sup');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('string');
-      $info->setOrder(8);
-      $info->save();
-
-      $info = $this->getCmd(null, 'nom_restriction_sup');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Nom restriction zone SUP', __FILE__));
-      }
-      $info->setLogicalId('nom_restriction_sup');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('string');
-      $info->setOrder(9);
-      $info->save();
-
-      $info = $this->getCmd(null, 'niveau_restriction_sup');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Niveau restriction zone SUP', __FILE__));
-      }
-      $info->setLogicalId('niveau_restriction_sup');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('numeric');
-      $info->setOrder(10);
-      $info->save();
-
-      $info = $this->getCmd(null, 'editorial_zone_sup');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Editorial zone SUP', __FILE__));
-      }
-      $info->setLogicalId('editorial_zone_sup');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('string');
-      $info->setOrder(11);
-      $info->save();
-      
-	  if ($typeRestriction == 'sup') {
-        $info = $this->getCmd(null, 'nom_zone_sou');
-        if (is_object($info)) {
-          $info->remove();
-        }
-
-        $info = $this->getCmd(null, 'nom_restriction_sou');
-        if (is_object($info)) {
-          $info->remove();
-        }
-
-        $info = $this->getCmd(null, 'niveau_restriction_sou');
-        if (is_object($info)) {
-          $info->remove();
-        }
-
-        $info = $this->getCmd(null, 'editorial_zone_sou');
-        if (is_object($info)) {
-          $info->remove();
-        }
-      }
-    }
-  
-    //commandes pour la zone d'eau souterraine
-    if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
-      $info = $this->getCmd(null, 'nom_zone_sou');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Nom zone SOU', __FILE__));
-      }
-      $info->setLogicalId('nom_zone_sou');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('string');
-      $info->setOrder(12);
-      $info->save();
-
-      $info = $this->getCmd(null, 'nom_restriction_sou');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Nom restriction zone SOU', __FILE__));
-      }
-      $info->setLogicalId('nom_restriction_sou');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('string');
-      $info->setOrder(13);
-      $info->save();
-
-      $info = $this->getCmd(null, 'niveau_restriction_sou');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Niveau restriction zone SOU', __FILE__));
-      }
-      $info->setLogicalId('niveau_restriction_sou');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('numeric');
-      $info->setOrder(14);
-      $info->save();
-
-      $info = $this->getCmd(null, 'editorial_zone_sou');
-      if (!is_object($info)) {
-        $info = new propluviaCmd();
-        $info->setName(__('Editorial zone SOU', __FILE__));
-      }
-      $info->setLogicalId('editorial_zone_sou');
-      $info->setEqLogic_id($this->getId());
-      $info->setType('info');
-      $info->setSubType('string');
-      $info->setOrder(15);
-      $info->save();
-    	  
-      if ($typeRestriction == 'sou') {
-        $info = $this->getCmd(null, 'nom_zone_sup');
-        if (is_object($info)) {
-          $info->remove();
-        }
-
-        $info = $this->getCmd(null, 'nom_restriction_sup');
-        if (is_object($info)) {
-          $info->remove();
-        }
-
-        $info = $this->getCmd(null, 'niveau_restriction_sup');
-        if (is_object($info)) {
-          $info->remove();
-        }
-
-        $info = $this->getCmd(null, 'editorial_zone_sup');
-        if (is_object($info)) {
-          $info->remove();
+    $zoneCommandDefinitions = $this->getZoneCommandDefinitions();
+    foreach ($zoneCommandDefinitions as $zoneType => $commands) {
+      $shouldCreate = $this->shouldBuildZoneCommands($zoneType, $typeRestriction);
+      foreach ($commands as $logicalId => $definition) {
+        if ($shouldCreate) {
+          $this->createOrUpdateInfoCommand($logicalId, $definition);
+        } else {
+          $this->removeInfoCommand($logicalId);
         }
       }
     }
@@ -351,6 +149,428 @@ class propluvia extends eqLogic {
     $refresh->setSubType('other');
     $refresh->setOrder(99);
     $refresh->save();
+  }
+
+  private function createOrUpdateInfoCommand($logicalId, $definition) {
+    $cmd = $this->getCmd(null, $logicalId);
+    if (!is_object($cmd)) {
+      $cmd = new propluviaCmd();
+      $cmd->setLogicalId($logicalId);
+      $cmd->setEqLogic_id($this->getId());
+      $cmd->setType('info');
+    } else {
+      $cmd->setEqLogic_id($this->getId());
+      $cmd->setLogicalId($logicalId);
+      $cmd->setType('info');
+    }
+    if (isset($definition['name'])) {
+      $cmd->setName($definition['name']);
+    }
+    if (isset($definition['subType'])) {
+      $cmd->setSubType($definition['subType']);
+    }
+    if (isset($definition['order'])) {
+      $cmd->setOrder($definition['order']);
+    }
+    $cmd->save();
+  }
+
+  private function removeInfoCommand($logicalId) {
+    $cmd = $this->getCmd(null, $logicalId);
+    if (is_object($cmd)) {
+      $cmd->remove();
+    }
+  }
+
+  private function updateCommandIfExists($logicalId, $value) {
+    $cmd = $this->getCmd(null, $logicalId);
+    if (is_object($cmd)) {
+      $this->checkAndUpdateCmd($logicalId, $value);
+    }
+  }
+
+  private function getCommonCommandDefinitions() {
+    return array(
+      'departement' => array(
+        'name' => __('Département', __FILE__),
+        'subType' => 'string',
+        'order' => 1,
+        'default' => ''
+      ),
+      'commune' => array(
+        'name' => __('Commune', __FILE__),
+        'subType' => 'string',
+        'order' => 2,
+        'default' => ''
+      ),
+      'numero_arrete' => array(
+        'name' => __('Numéro arrêté', __FILE__),
+        'subType' => 'string',
+        'order' => 4,
+        'default' => __('Non communiqué', __FILE__)
+      ),
+      'date_debut' => array(
+        'name' => __('Date début arrêté', __FILE__),
+        'subType' => 'string',
+        'order' => 5,
+        'default' => ''
+      ),
+      'date_fin' => array(
+        'name' => __('Date fin arrêté', __FILE__),
+        'subType' => 'string',
+        'order' => 6,
+        'default' => ''
+      ),
+      'urlPdf' => array(
+        'name' => __('Url arrêté en pdf', __FILE__),
+        'subType' => 'string',
+        'order' => 7,
+        'default' => ''
+      ),
+      'urlPdfCadre' => array(
+        'name' => __('Url arrêté cadre', __FILE__),
+        'subType' => 'string',
+        'order' => 8,
+        'default' => ''
+      ),
+    );
+  }
+
+  private function getZoneCommandDefinitions() {
+    return array(
+      'SUP' => array(
+        'nom_zone_sup' => array(
+          'name' => __('Nom zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 9,
+          'default' => '',
+          'valueKey' => 'nom'
+        ),
+        'nom_restriction_sup' => array(
+          'name' => __('Nom restriction zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 10,
+          'default' => '',
+          'valueKey' => 'label'
+        ),
+        'niveau_restriction_sup' => array(
+          'name' => __('Niveau restriction zone SUP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 11,
+          'default' => 0,
+          'valueKey' => 'niveau'
+        ),
+        'editorial_zone_sup' => array(
+          'name' => __('Editorial zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 12,
+          'default' => '',
+          'valueKey' => 'editorial'
+        ),
+        'niveau_gravite_sup' => array(
+          'name' => __('Niveau gravité zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 13,
+          'default' => '',
+          'valueKey' => 'niveauGravite'
+        ),
+        'id_zone_sup' => array(
+          'name' => __('ID zone SUP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 14,
+          'default' => 0,
+          'valueKey' => 'id'
+        ),
+        'id_sandre_zone_sup' => array(
+          'name' => __('ID Sandre zone SUP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 15,
+          'default' => 0,
+          'valueKey' => 'idSandre'
+        ),
+        'code_zone_sup' => array(
+          'name' => __('Code zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 16,
+          'default' => '',
+          'valueKey' => 'code'
+        ),
+        'type_zone_sup' => array(
+          'name' => __('Type zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 17,
+          'default' => '',
+          'valueKey' => 'type'
+        ),
+        'ressource_influencee_sup' => array(
+          'name' => __('Ressource influencée zone SUP', __FILE__),
+          'subType' => 'binary',
+          'order' => 18,
+          'default' => 0,
+          'valueKey' => 'ressourceInfluencee'
+        ),
+        'usages_zone_sup' => array(
+          'name' => __('Usages zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 19,
+          'default' => '[]',
+          'valueKey' => 'usages'
+        ),
+        'gid_zone_sup' => array(
+          'name' => __('GID zone SUP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 20,
+          'default' => 0,
+          'valueKey' => 'gid'
+        ),
+        'cdzas_zone_sup' => array(
+          'name' => __('Code ZAS zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 21,
+          'default' => '',
+          'valueKey' => 'CdZAS'
+        ),
+        'lbzas_zone_sup' => array(
+          'name' => __('Libellé ZAS zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 22,
+          'default' => '',
+          'valueKey' => 'LbZAS'
+        ),
+        'typezas_zone_sup' => array(
+          'name' => __('Type ZAS zone SUP', __FILE__),
+          'subType' => 'string',
+          'order' => 23,
+          'default' => '',
+          'valueKey' => 'TypeZAS'
+        ),
+      ),
+      'SOU' => array(
+        'nom_zone_sou' => array(
+          'name' => __('Nom zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 24,
+          'default' => '',
+          'valueKey' => 'nom'
+        ),
+        'nom_restriction_sou' => array(
+          'name' => __('Nom restriction zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 25,
+          'default' => '',
+          'valueKey' => 'label'
+        ),
+        'niveau_restriction_sou' => array(
+          'name' => __('Niveau restriction zone SOU', __FILE__),
+          'subType' => 'numeric',
+          'order' => 26,
+          'default' => 0,
+          'valueKey' => 'niveau'
+        ),
+        'editorial_zone_sou' => array(
+          'name' => __('Editorial zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 27,
+          'default' => '',
+          'valueKey' => 'editorial'
+        ),
+        'niveau_gravite_sou' => array(
+          'name' => __('Niveau gravité zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 28,
+          'default' => '',
+          'valueKey' => 'niveauGravite'
+        ),
+        'id_zone_sou' => array(
+          'name' => __('ID zone SOU', __FILE__),
+          'subType' => 'numeric',
+          'order' => 29,
+          'default' => 0,
+          'valueKey' => 'id'
+        ),
+        'id_sandre_zone_sou' => array(
+          'name' => __('ID Sandre zone SOU', __FILE__),
+          'subType' => 'numeric',
+          'order' => 30,
+          'default' => 0,
+          'valueKey' => 'idSandre'
+        ),
+        'code_zone_sou' => array(
+          'name' => __('Code zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 31,
+          'default' => '',
+          'valueKey' => 'code'
+        ),
+        'type_zone_sou' => array(
+          'name' => __('Type zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 32,
+          'default' => '',
+          'valueKey' => 'type'
+        ),
+        'ressource_influencee_sou' => array(
+          'name' => __('Ressource influencée zone SOU', __FILE__),
+          'subType' => 'binary',
+          'order' => 33,
+          'default' => 0,
+          'valueKey' => 'ressourceInfluencee'
+        ),
+        'usages_zone_sou' => array(
+          'name' => __('Usages zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 34,
+          'default' => '[]',
+          'valueKey' => 'usages'
+        ),
+        'gid_zone_sou' => array(
+          'name' => __('GID zone SOU', __FILE__),
+          'subType' => 'numeric',
+          'order' => 35,
+          'default' => 0,
+          'valueKey' => 'gid'
+        ),
+        'cdzas_zone_sou' => array(
+          'name' => __('Code ZAS zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 36,
+          'default' => '',
+          'valueKey' => 'CdZAS'
+        ),
+        'lbzas_zone_sou' => array(
+          'name' => __('Libellé ZAS zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 37,
+          'default' => '',
+          'valueKey' => 'LbZAS'
+        ),
+        'typezas_zone_sou' => array(
+          'name' => __('Type ZAS zone SOU', __FILE__),
+          'subType' => 'string',
+          'order' => 38,
+          'default' => '',
+          'valueKey' => 'TypeZAS'
+        ),
+      ),
+      'AEP' => array(
+        'nom_zone_aep' => array(
+          'name' => __('Nom zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 39,
+          'default' => '',
+          'valueKey' => 'nom'
+        ),
+        'nom_restriction_aep' => array(
+          'name' => __('Nom restriction zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 40,
+          'default' => '',
+          'valueKey' => 'label'
+        ),
+        'niveau_restriction_aep' => array(
+          'name' => __('Niveau restriction zone AEP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 41,
+          'default' => 0,
+          'valueKey' => 'niveau'
+        ),
+        'editorial_zone_aep' => array(
+          'name' => __('Editorial zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 42,
+          'default' => '',
+          'valueKey' => 'editorial'
+        ),
+        'niveau_gravite_aep' => array(
+          'name' => __('Niveau gravité zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 43,
+          'default' => '',
+          'valueKey' => 'niveauGravite'
+        ),
+        'id_zone_aep' => array(
+          'name' => __('ID zone AEP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 44,
+          'default' => 0,
+          'valueKey' => 'id'
+        ),
+        'id_sandre_zone_aep' => array(
+          'name' => __('ID Sandre zone AEP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 45,
+          'default' => 0,
+          'valueKey' => 'idSandre'
+        ),
+        'code_zone_aep' => array(
+          'name' => __('Code zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 46,
+          'default' => '',
+          'valueKey' => 'code'
+        ),
+        'type_zone_aep' => array(
+          'name' => __('Type zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 47,
+          'default' => '',
+          'valueKey' => 'type'
+        ),
+        'ressource_influencee_aep' => array(
+          'name' => __('Ressource influencée zone AEP', __FILE__),
+          'subType' => 'binary',
+          'order' => 48,
+          'default' => 0,
+          'valueKey' => 'ressourceInfluencee'
+        ),
+        'usages_zone_aep' => array(
+          'name' => __('Usages zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 49,
+          'default' => '[]',
+          'valueKey' => 'usages'
+        ),
+        'gid_zone_aep' => array(
+          'name' => __('GID zone AEP', __FILE__),
+          'subType' => 'numeric',
+          'order' => 50,
+          'default' => 0,
+          'valueKey' => 'gid'
+        ),
+        'cdzas_zone_aep' => array(
+          'name' => __('Code ZAS zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 51,
+          'default' => '',
+          'valueKey' => 'CdZAS'
+        ),
+        'lbzas_zone_aep' => array(
+          'name' => __('Libellé ZAS zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 52,
+          'default' => '',
+          'valueKey' => 'LbZAS'
+        ),
+        'typezas_zone_aep' => array(
+          'name' => __('Type ZAS zone AEP', __FILE__),
+          'subType' => 'string',
+          'order' => 53,
+          'default' => '',
+          'valueKey' => 'TypeZAS'
+        ),
+      ),
+    );
+  }
+
+  private function shouldBuildZoneCommands($zoneType, $typeRestriction) {
+    switch ($zoneType) {
+      case 'SUP':
+        return in_array($typeRestriction, array('sup', 'all'));
+      case 'SOU':
+        return in_array($typeRestriction, array('sou', 'all'));
+      default:
+        return true;
+    }
   }
 
   public function pullpropluvia() {
@@ -420,20 +640,19 @@ class propluvia extends eqLogic {
       if (count($jsonData) === 0) {
         log::add(__CLASS__, 'info', 'Aucune donnée trouvée à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
 
-        $this->checkAndUpdateCmd('departement', substr($codeInseeCommune, 0, 2));
-        $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
-        $this->checkAndUpdateCmd('date_debut', '');
-        $this->checkAndUpdateCmd('date_fin', '');
-        $this->checkAndUpdateCmd('commune', $nomCommune);
-        $this->checkAndUpdateCmd('nom_zone_sup', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sup', 0);
-        $this->checkAndUpdateCmd('nom_restriction_sup', '');
-        $this->checkAndUpdateCmd('editorial_zone_sup', '');
-        $this->checkAndUpdateCmd('nom_zone_sou', '');
-        $this->checkAndUpdateCmd('niveau_restriction_sou', 0);
-        $this->checkAndUpdateCmd('nom_restriction_sou', '');
-        $this->checkAndUpdateCmd('editorial_zone_sou', '');
-        $this->checkAndUpdateCmd('urlPdf', '');
+        $this->updateCommandIfExists('departement', substr($codeInseeCommune, 0, 2));
+        $this->updateCommandIfExists('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
+        $this->updateCommandIfExists('date_debut', '');
+        $this->updateCommandIfExists('date_fin', '');
+        $this->updateCommandIfExists('commune', $nomCommune);
+        $this->updateCommandIfExists('urlPdf', '');
+        $this->updateCommandIfExists('urlPdfCadre', '');
+
+        foreach ($this->getZoneCommandDefinitions() as $zoneType => $commands) {
+          foreach ($commands as $logicalId => $definition) {
+            $this->updateCommandIfExists($logicalId, isset($definition['default']) ? $definition['default'] : '');
+          }
+        }
       } else {
         $levelMapping = array(
           'vigilance' => array('label' => __('Vigilance', __FILE__), 'value' => 1),
@@ -483,20 +702,46 @@ class propluvia extends eqLogic {
           return implode('<br/><br/>', $messages);
         };
 
+        $zoneCommandDefinitions = $this->getZoneCommandDefinitions();
+        $zoneValues = array();
+        foreach ($zoneCommandDefinitions as $zoneType => $commands) {
+          $zoneValues[$zoneType] = array(
+            'nom' => '',
+            'niveau' => 0,
+            'label' => '',
+            'editorial' => '',
+            'niveauGravite' => '',
+            'id' => 0,
+            'idSandre' => 0,
+            'code' => '',
+            'type' => '',
+            'ressourceInfluencee' => 0,
+            'usages' => '[]',
+            'gid' => 0,
+            'CdZAS' => '',
+            'LbZAS' => '',
+            'TypeZAS' => '',
+          );
+        }
+
         $codeInseeDepartement = substr($codeInseeCommune, 0, 2);
         $dateDebutValiditeArrete = '';
         $dateFinValiditeArrete = '';
         $numeroArrete = __('Non communiqué', __FILE__);
         $urlPdf = '';
+        $urlPdfCadre = '';
+        $arreteCaptured = false;
 
         foreach ($jsonData as $zone) {
           if (!is_array($zone)) {
             continue;
           }
+
           if (!empty($zone['departement'])) {
             $codeInseeDepartement = $zone['departement'];
           }
-          if (isset($zone['arrete']) && is_array($zone['arrete'])) {
+
+          if (!$arreteCaptured && isset($zone['arrete']) && is_array($zone['arrete'])) {
             $arrete = $zone['arrete'];
             if (!empty($arrete['dateDebutValidite'])) {
               $dateDebutValiditeArrete = date('d/m/Y', strtotime($arrete['dateDebutValidite']));
@@ -510,62 +755,40 @@ class propluvia extends eqLogic {
             if (!empty($arrete['cheminFichier'])) {
               $urlPdf = $arrete['cheminFichier'];
             }
-            break;
+            if (!empty($arrete['cheminFichierArreteCadre'])) {
+              $urlPdfCadre = $arrete['cheminFichierArreteCadre'];
+            }
+            $arreteCaptured = true;
           }
-        }
 
-        log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
-        log::add(__CLASS__, 'debug', 'Numéro arrêté          : '.$numeroArrete);
-        log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
-        log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
-        log::add(__CLASS__, 'debug', 'Commune                : '.$nomCommune);
-        log::add(__CLASS__, 'debug', 'url pdf arrêté         : '.$urlPdf);
-
-        $this->checkAndUpdateCmd('departement', $codeInseeDepartement);
-        $this->checkAndUpdateCmd('numero_arrete', $numeroArrete);
-        $this->checkAndUpdateCmd('date_debut', $dateDebutValiditeArrete);
-        $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
-        $this->checkAndUpdateCmd('commune', $nomCommune);
-        $this->checkAndUpdateCmd('urlPdf', $urlPdf);
-
-        $zoneValues = array(
-          'SUP' => array(
-            'nom' => '',
-            'niveau' => 0,
-            'label' => '',
-            'editorial' => ''
-          ),
-          'SOU' => array(
-            'nom' => '',
-            'niveau' => 0,
-            'label' => '',
-            'editorial' => ''
-          )
-        );
-
-        foreach ($jsonData as $zone) {
-          if (!is_array($zone)) {
-            continue;
-          }
           $typeZone = isset($zone['type']) ? strtoupper($zone['type']) : '';
           if (!isset($zoneValues[$typeZone])) {
             continue;
           }
+
           $nomZone = isset($zone['nom']) ? $zone['nom'] : '';
-          $niveauGravite = isset($zone['niveauGravite']) ? strtolower($zone['niveauGravite']) : '';
+          $niveauGraviteRaw = isset($zone['niveauGravite']) ? $zone['niveauGravite'] : '';
+          $niveauGraviteKey = strtolower($niveauGraviteRaw);
           $usages = isset($zone['usages']) && is_array($zone['usages']) ? $zone['usages'] : array();
 
           $niveauRestriction = 0;
           $nomNiveau = '';
-          if (isset($levelMapping[$niveauGravite])) {
-            $niveauRestriction = $levelMapping[$niveauGravite]['value'];
-            $nomNiveau = $levelMapping[$niveauGravite]['label'];
-          } elseif ($niveauGravite !== '') {
+          if (isset($levelMapping[$niveauGraviteKey])) {
+            $niveauRestriction = $levelMapping[$niveauGraviteKey]['value'];
+            $nomNiveau = $levelMapping[$niveauGraviteKey]['label'];
+          } elseif ($niveauGraviteRaw !== '') {
             $niveauRestriction = 0;
-            $nomNiveau = ucfirst($niveauGravite);
+            $nomNiveau = ucfirst($niveauGraviteKey);
           }
 
           $editorial = $buildEditorial($usages);
+          $usagesJson = '[]';
+          if (!empty($usages)) {
+            $usagesJsonEncoded = json_encode($usages, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($usagesJsonEncoded !== false) {
+              $usagesJson = $usagesJsonEncoded;
+            }
+          }
 
           log::add(__CLASS__, 'debug', '----------'.strtoupper($nomZone.' ['.$typeZone.']').'----------');
           log::add(__CLASS__, 'debug', 'Niveau >> '.$nomNiveau.' ('.$niveauRestriction.')');
@@ -576,33 +799,43 @@ class propluvia extends eqLogic {
             'niveau' => $niveauRestriction,
             'label' => $nomNiveau,
             'editorial' => $editorial,
+            'niveauGravite' => $niveauGraviteRaw,
+            'id' => isset($zone['id']) ? intval($zone['id']) : 0,
+            'idSandre' => isset($zone['idSandre']) ? intval($zone['idSandre']) : 0,
+            'code' => isset($zone['code']) ? $zone['code'] : '',
+            'type' => isset($zone['type']) ? $zone['type'] : $typeZone,
+            'ressourceInfluencee' => !empty($zone['ressourceInfluencee']) ? 1 : 0,
+            'usages' => $usagesJson,
+            'gid' => isset($zone['gid']) ? intval($zone['gid']) : 0,
+            'CdZAS' => isset($zone['CdZAS']) ? $zone['CdZAS'] : '',
+            'LbZAS' => isset($zone['LbZAS']) ? $zone['LbZAS'] : '',
+            'TypeZAS' => isset($zone['TypeZAS']) ? $zone['TypeZAS'] : '',
           );
         }
 
-        if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
-          $this->checkAndUpdateCmd('nom_zone_sup', $zoneValues['SUP']['nom']);
-          $this->checkAndUpdateCmd('niveau_restriction_sup', $zoneValues['SUP']['niveau']);
-          $this->checkAndUpdateCmd('nom_restriction_sup', $zoneValues['SUP']['label']);
-          $this->checkAndUpdateCmd('editorial_zone_sup', $zoneValues['SUP']['editorial']);
-        }
-        if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
-          $this->checkAndUpdateCmd('nom_zone_sou', $zoneValues['SOU']['nom']);
-          $this->checkAndUpdateCmd('niveau_restriction_sou', $zoneValues['SOU']['niveau']);
-          $this->checkAndUpdateCmd('nom_restriction_sou', $zoneValues['SOU']['label']);
-          $this->checkAndUpdateCmd('editorial_zone_sou', $zoneValues['SOU']['editorial']);
-        }
+        log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
+        log::add(__CLASS__, 'debug', 'Numéro arrêté          : '.$numeroArrete);
+        log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
+        log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
+        log::add(__CLASS__, 'debug', 'Commune                : '.$nomCommune);
+        log::add(__CLASS__, 'debug', 'url pdf arrêté         : '.$urlPdf);
+        log::add(__CLASS__, 'debug', 'url pdf arrêté cadre   : '.$urlPdfCadre);
 
-        if ($typeRestriction == 'sup') {
-          $this->checkAndUpdateCmd('nom_zone_sou', '');
-          $this->checkAndUpdateCmd('niveau_restriction_sou', 0);
-          $this->checkAndUpdateCmd('nom_restriction_sou', '');
-          $this->checkAndUpdateCmd('editorial_zone_sou', '');
-        }
-        if ($typeRestriction == 'sou') {
-          $this->checkAndUpdateCmd('nom_zone_sup', '');
-          $this->checkAndUpdateCmd('niveau_restriction_sup', 0);
-          $this->checkAndUpdateCmd('nom_restriction_sup', '');
-          $this->checkAndUpdateCmd('editorial_zone_sup', '');
+        $this->updateCommandIfExists('departement', $codeInseeDepartement);
+        $this->updateCommandIfExists('numero_arrete', $numeroArrete);
+        $this->updateCommandIfExists('date_debut', $dateDebutValiditeArrete);
+        $this->updateCommandIfExists('date_fin', $dateFinValiditeArrete);
+        $this->updateCommandIfExists('commune', $nomCommune);
+        $this->updateCommandIfExists('urlPdf', $urlPdf);
+        $this->updateCommandIfExists('urlPdfCadre', $urlPdfCadre);
+
+        foreach ($zoneCommandDefinitions as $zoneType => $commands) {
+          $zoneData = isset($zoneValues[$zoneType]) ? $zoneValues[$zoneType] : array();
+          foreach ($commands as $logicalId => $definition) {
+            $valueKey = isset($definition['valueKey']) ? $definition['valueKey'] : null;
+            $value = $valueKey !== null && isset($zoneData[$valueKey]) ? $zoneData[$valueKey] : (isset($definition['default']) ? $definition['default'] : '');
+            $this->updateCommandIfExists($logicalId, $value);
+          }
         }
       }
     }
