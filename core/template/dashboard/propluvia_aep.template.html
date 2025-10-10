@@ -6,21 +6,21 @@
     </span>
     <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
       <i class="fas fa-sync"></i>
-    </span>   
-	<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+    </span>
+        <span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
     <a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
   </center>
   <div class="#isVerticalAlign#">
     <center>
 
 <table class="tableau">
-	<tbody>
-	<tr>
-		<td><i class='fas fa-map-pin'></i></td>
-      	<td>Commune : #commune# (#departement#)</td>
-	</tr>
-	<tr>
-      	<td><i class='fas fa-pen'></i></td>
+        <tbody>
+        <tr>
+                <td><i class='fas fa-map-pin'></i></td>
+        <td>Commune : #commune# (#departement#)</td>
+        </tr>
+        <tr>
+        <td><i class='fas fa-pen'></i></td>
         <td id="arreteCell">
             <script>
                 var urlPdf = "#urlPdf#";
@@ -44,62 +44,62 @@
                 document.getElementById("arreteCell").innerHTML = arreteContent;
             </script>
         </td>
-	</tr>
+        </tr>
     <tr>
-      	<td><i class='fas fa-angle-right'></i></td>
-		<td>Date de début : #date_debut#</td>
-	</tr>
+        <td><i class='fas fa-angle-right'></i></td>
+                <td>Date de début : #date_debut#</td>
+        </tr>
     <tr>
-      	<td><i class='fas fa-angle-right'></i></td>
-		<td>Date de fin : #date_fin#</td>
-	</tr>
-	</tbody>
+        <td><i class='fas fa-angle-right'></i></td>
+                <td>Date de fin : #date_fin#</td>
+        </tr>
+        </tbody>
 </table>
-      
-<div class="tableaux">      
-<table class="tableau">
-	<tbody>
+
+<div class="tableaux">
+  <table class="tableau">
+        <tbody>
     <tr>
-      <td colspan="2" style="width: 300px; font-weight: bold;"><center>Nappes (SOU)</center></td>
-	</tr>
-	<tr>
-		<td style="width: 10px;"><i class='fas fa-map-pin'></i></td>
-      	<td>Nom : #nom_zone_sou#</td>
-	</tr>
-	<tr>
-      	<td><i class='fas fa-pen'></i></td>
-		<td>Restriction : #nom_restriction_sou#</td>
-	</tr>
+      <td colspan="2" style="width: 300px; font-weight: bold;"><center>Eau du robinet (AEP)</center></td>
+        </tr>
+        <tr>
+                <td style="width: 10px;"><i class='fas fa-map-pin'></i></td>
+        <td>Nom : #nom_zone_aep#</td>
+        </tr>
+        <tr>
+        <td><i class='fas fa-pen'></i></td>
+                <td>Restriction : #nom_restriction_aep#</td>
+        </tr>
     <tr>
-      	<td colspan="2">
-          <table border="0">
-          <tbody> 
+        <td colspan="2">
+        <table border="0">
+          <tbody>
             <tr style="border: 1px black;">
-              <td style="width: 60px; height: 20px; background-color: #ffffff !important;">#nom_restriction_sou_N1#
+              <td style="width: 60px; height: 20px; background-color: #ffffff !important;">#nom_restriction_aep_N1#
               </td>
-              <td style="width: 60px; height: 20px; background-color: #7f7f7f !important;">#nom_restriction_sou_N2#
+              <td style="width: 60px; height: 20px; background-color: #7f7f7f !important;">#nom_restriction_aep_N2#
               </td>
-              <td style="width: 60px; height: 20px; background-color: #fae805 !important;">#nom_restriction_sou_N3#
+              <td style="width: 60px; height: 20px; background-color: #fae805 !important;">#nom_restriction_aep_N3#
               </td>
-              <td style="width: 60px; height: 20px; background-color: #ff9900 !important;">#nom_restriction_sou_N4#
+              <td style="width: 60px; height: 20px; background-color: #ff9900 !important;">#nom_restriction_aep_N4#
               </td>
-              <td style="width: 60px; height: 20px; background-color: #ff0000 !important;">#nom_restriction_sou_N5#
+              <td style="width: 60px; height: 20px; background-color: #ff0000 !important;">#nom_restriction_aep_N5#
               </td>
             </tr>
           </tbody>
         </table>
       </td>
-	</tr>
+        </tr>
     <tr>
-      	<td><i class='fas fa-angle-right'></i></td>
-		<td>Mesures : #editorial_zone_sou#</td>
-	</tr>
-	</tbody>
+        <td><i class='fas fa-angle-right'></i></td>
+                <td>Mesures : #editorial_zone_aep#</td>
+        </tr>
+        </tbody>
 </table>
-      </div>
-  
-  <div style="font-size: 10px; font-style: italic; text-align:left;margin-left: 5px">
-	#lastActuPropluvia#
+</div>
+
+      <div style="font-size: 10px; font-style: italic; text-align:left;margin-left: 5px">
+        #lastActuPropluvia#
   </div>
 
     </center>
@@ -110,7 +110,7 @@
 //    eqLogic.find('.propluviaCdc').css('font-size', (eqlogic_height * 0.05) + 'px')
 //    eqLogic.find('.propluviaValue, .propluviaTitle').css('font-size', (eqlogic_height * 0.06) + 'px')
 //    eqLogic.find('.propluviaUnite, .propluviaTitleIcon').css('font-size', (eqlogic_height * 0.04) + 'px')
-    
+
     if ('#refresh_id#' != '') {
       $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
         jeedom.cmd.execute({id: '#refresh_id#'})

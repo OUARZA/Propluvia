@@ -796,6 +796,8 @@ class propluvia extends eqLogic {
         return in_array($typeRestriction, array('sup', 'all'));
       case 'SOU':
         return in_array($typeRestriction, array('sou', 'all'));
+      case 'AEP':
+        return in_array($typeRestriction, array('aep', 'all'));
       default:
         return true;
     }
@@ -959,10 +961,10 @@ class propluvia extends eqLogic {
         $codeInseeDepartement = substr($codeInseeCommune, 0, 2);
         $dateDebutValiditeArrete = '';
         $dateFinValiditeArrete = '';
-        $numeroArrete = __('Non communiqué', __FILE__);
+        $defaultNumeroArrete = __('Non communiqué', __FILE__);
+        $numeroArrete = $defaultNumeroArrete;
         $urlPdf = '';
         $urlPdfCadre = '';
-        $arreteCaptured = false;
 
         foreach ($jsonData as $zone) {
           if (!is_array($zone)) {
@@ -973,24 +975,23 @@ class propluvia extends eqLogic {
             $codeInseeDepartement = $zone['departement'];
           }
 
-          if (!$arreteCaptured && isset($zone['arrete']) && is_array($zone['arrete'])) {
+          if (isset($zone['arrete']) && is_array($zone['arrete'])) {
             $arrete = $zone['arrete'];
-            if (!empty($arrete['dateDebutValidite'])) {
+            if ($dateDebutValiditeArrete === '' && !empty($arrete['dateDebutValidite'])) {
               $dateDebutValiditeArrete = date('d/m/Y', strtotime($arrete['dateDebutValidite']));
             }
-            if (!empty($arrete['dateFinValidite'])) {
+            if ($dateFinValiditeArrete === '' && !empty($arrete['dateFinValidite'])) {
               $dateFinValiditeArrete = date('d/m/Y', strtotime($arrete['dateFinValidite']));
             }
-            if (!empty($arrete['id'])) {
+            if ($numeroArrete === $defaultNumeroArrete && !empty($arrete['id'])) {
               $numeroArrete = $arrete['id'];
             }
-            if (!empty($arrete['cheminFichier'])) {
+            if ($urlPdf === '' && !empty($arrete['cheminFichier'])) {
               $urlPdf = $arrete['cheminFichier'];
             }
-            if (!empty($arrete['cheminFichierArreteCadre'])) {
+            if ($urlPdfCadre === '' && !empty($arrete['cheminFichierArreteCadre'])) {
               $urlPdfCadre = $arrete['cheminFichierArreteCadre'];
             }
-            $arreteCaptured = true;
           }
 
           $typeZone = isset($zone['type']) ? strtoupper($zone['type']) : '';
@@ -1161,7 +1162,31 @@ class propluvia extends eqLogic {
           break;
       }
 
-    }    
+      $replace['#nom_restriction_aep_N1#'] = '';
+      $replace['#nom_restriction_aep_N2#'] = '';
+      $replace['#nom_restriction_aep_N3#'] = '';
+      $replace['#nom_restriction_aep_N4#'] = '';
+      $replace['#nom_restriction_aep_N5#'] = '';
+
+      switch ($replace['#niveau_restriction_aep#']) {
+        case 0:
+          $replace['#nom_restriction_aep_N1#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 1:
+          $replace['#nom_restriction_aep_N2#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 3:
+          $replace['#nom_restriction_aep_N3#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 4:
+          $replace['#nom_restriction_aep_N4#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+        case 5:
+          $replace['#nom_restriction_aep_N5#'] = '<center><i class="fab fa-mixer"></i></center>';
+          break;
+      }
+
+    }
     $lastActuPropluvia = $this->getConfiguration('lastActuPropluvia','');
     $replace['#lastActuPropluvia#'] = 'Données PROPLUVIA importées le '.date('d/m/Y à H:i:s', $lastActuPropluvia);
 
@@ -1174,6 +1199,12 @@ class propluvia extends eqLogic {
     }
     if ($typeRestriction == 'sou') {
       $getTemplate = getTemplate('core', $version, 'propluvia_sou.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
+      $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
+      $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
+      return $postToHtml; // renvoie le code du template du widget.
+    }
+    if ($typeRestriction == 'aep') {
+      $getTemplate = getTemplate('core', $version, 'propluvia_aep.template', __CLASS__); // on récupère le template 'propluvia.template' du plugin.
       $template_replace = template_replace($replace, $getTemplate); // on remplace les tags
       $postToHtml = $this->postToHtml($_version,$template_replace); // on met en cache le widget, si la config de l'user le permet.
       return $postToHtml; // renvoie le code du template du widget.

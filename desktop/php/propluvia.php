@@ -20,8 +20,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
 .usage-filter-wrapper {
   width: 100%;
   min-height: 180px;
-  border: 1px solid #d9d9d9;
-  background-color: #fff;
+  border: none;
+  background-color: transparent;
   padding: 14px 18px;
 }
 
@@ -187,17 +187,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <a href="http://public.opendatasoft.com/explore/dataset/correspondance-code-insee-code-postal/table/?flg=fr&location=9,45.71673,3.13522&basemap=jawg.light" target="_blank">Liste des codes INSEE</a>
 							</div>
                             <div class="form-group">
-                            	<label class="col-sm-4 control-label">{{Restrictions spécifiques}}</label>
+                                <label class="col-sm-4 control-label">{{Restrictions spécifiques}}</label>
                                 <div class="col-sm-3">
                                   <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeRestriction">
-                                    <option value="sup">{{Eaux superficielles}}</option>
-                                    <option value="sou">{{Eaux souterraines}}</option>
-                                    <option value="all">{{Les deux}}</option>
+                                    <option value="aep">{{Du robinet (AEP)}}</option>
+                                    <option value="sup">{{D'un cours d'eau ou d'une rivière (SUP)}}</option>
+                                    <option value="sou">{{Des nappes (puits ou forage) (SOU)}}</option>
+                                    <option value="all">{{Toutes les ressources}}</option>
                                   </select>
                                 </div>
-                        	</div>
+                                </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{Type d'usage}}</label>
+                                <label class="col-sm-4 control-label">{{Profil}}</label>
                                 <div class="col-sm-3">
                                   <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeInfo">
                                     <option value="particulier">{{Particulier}}</option>
