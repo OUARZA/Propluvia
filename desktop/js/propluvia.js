@@ -193,10 +193,11 @@ var propluviaUsageFilterManager = {
       return;
     }
     $container.empty();
+    var storedKeys = $.isArray(selectedKeys) ? selectedKeys : [];
     if (!options.length) {
       var infoMessage = isInitial ? 'La liste des usages sera disponible après un premier rafraîchissement des données.' : "Aucun usage n\'a été trouvé pour cet équipement.";
       $container.append($('<div class="alert alert-info"></div>').text(infoMessage));
-      this.syncHiddenFromCheckboxes(true, selectedKeys);
+      this.syncHiddenFromCheckboxes(true, storedKeys);
       return;
     }
     var lastThematique = null;
@@ -208,18 +209,34 @@ var propluviaUsageFilterManager = {
         $container.append($heading);
         lastThematique = thematique;
       }
-      var key = option.key;
-      if (!key) {
+      var keys = [];
+      if ($.isArray(option.keys)) {
+        for (var k = 0; k < option.keys.length; k++) {
+          var candidate = option.keys[k];
+          if (typeof candidate === 'string' || typeof candidate === 'number') {
+            var normalized = $.trim(String(candidate));
+            if (normalized !== '' && keys.indexOf(normalized) === -1) {
+              keys.push(normalized);
+            }
+          }
+        }
+      }
+      if (!keys.length && option.key) {
+        keys.push(String(option.key));
+      }
+      if (!keys.length) {
         continue;
       }
-      var $label = $('<label class="checkbox-inline usage-filter-option"></label>');
-      var $checkbox = $('<input type="checkbox" class="usage-filter-checkbox" />').attr('data-usage-key', key);
+      var displayKey = option.displayKey || keys[0];
+      var checkboxId = 'usage-filter-' + displayKey;
+      var $label = $('<label class="checkbox-inline usage-filter-option"></label>').attr('for', checkboxId);
+      var $checkbox = $('<input type="checkbox" class="usage-filter-checkbox" />').attr('id', checkboxId).attr('data-usage-keys', keys.join(','));
       $label.append($checkbox);
-      var nom = option.nom || key;
+      var nom = option.nom || keys[0];
       $label.append(document.createTextNode(' ' + nom));
       $container.append($label);
     }
-    this.applySelection(selectedKeys);
+    this.applySelection(storedKeys);
   },
   applySelection: function (selectedKeys) {
     var $container = $('#usageFilterCheckboxes');
@@ -227,12 +244,33 @@ var propluviaUsageFilterManager = {
       return;
     }
     var hasStoredSelection = $.isArray(selectedKeys) && selectedKeys.length > 0;
+    var selectedMap = {};
+    if (hasStoredSelection) {
+      for (var i = 0; i < selectedKeys.length; i++) {
+        var selectedKey = $.trim(String(selectedKeys[i]));
+        if (selectedKey !== '') {
+          selectedMap[selectedKey] = true;
+        }
+      }
+    }
     $container.find('.usage-filter-checkbox').each(function () {
-      var key = $(this).attr('data-usage-key');
+      var $checkbox = $(this);
+      var optionKeys = propluviaUsageFilterManager.parseKeys($checkbox.attr('data-usage-keys'));
+      if (!optionKeys.length) {
+        $checkbox.prop('checked', false);
+        return;
+      }
       if (hasStoredSelection) {
-        $(this).prop('checked', selectedKeys.indexOf(key) !== -1);
+        var shouldCheck = false;
+        for (var j = 0; j < optionKeys.length; j++) {
+          if (selectedMap[optionKeys[j]]) {
+            shouldCheck = true;
+            break;
+          }
+        }
+        $checkbox.prop('checked', shouldCheck);
       } else {
-        $(this).prop('checked', true);
+        $checkbox.prop('checked', true);
       }
     });
     this.syncHiddenFromCheckboxes(true, selectedKeys);
@@ -243,20 +281,38 @@ var propluviaUsageFilterManager = {
     if ($container.length === 0 || $hidden.length === 0) {
       return;
     }
-    var checkedKeys = [];
-    $container.find('.usage-filter-checkbox:checked').each(function () {
-      checkedKeys.push($(this).attr('data-usage-key'));
+    var initialArray = $.isArray(initialKeys) ? initialKeys : [];
+    var allKeysMap = {};
+    var checkedKeysMap = {};
+    $container.find('.usage-filter-checkbox').each(function () {
+      var $checkbox = $(this);
+      var keys = propluviaUsageFilterManager.parseKeys($checkbox.attr('data-usage-keys'));
+      if (!keys.length) {
+        return;
+      }
+      var isChecked = $checkbox.prop('checked');
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        if (key === '') {
+          continue;
+        }
+        allKeysMap[key] = true;
+        if (isChecked) {
+          checkedKeysMap[key] = true;
+        }
+      }
     });
-    var totalCheckboxes = $container.find('.usage-filter-checkbox').length;
-    if (totalCheckboxes === 0) {
+    var allKeys = Object.keys(allKeysMap);
+    var checkedKeys = Object.keys(checkedKeysMap);
+    if (allKeys.length === 0) {
       $hidden.value('');
       return;
     }
-    if (isInitial === true && (!$.isArray(initialKeys) || initialKeys.length === 0) && checkedKeys.length === totalCheckboxes) {
+    if (isInitial === true && initialArray.length === 0 && checkedKeys.length === allKeys.length) {
       $hidden.value('');
       return;
     }
-    if (checkedKeys.length === totalCheckboxes) {
+    if (checkedKeys.length === allKeys.length) {
       $hidden.value('');
     } else {
       $hidden.value(checkedKeys.join(','));
@@ -277,6 +333,22 @@ var propluviaUsageFilterManager = {
       var key = $.trim(parts[i]);
       if (key !== '') {
         keys.push(key);
+      }
+    }
+    return keys;
+  },
+  parseKeys: function (raw) {
+    var keys = [];
+    if (typeof raw !== 'string' || raw === '') {
+      return keys;
+    }
+    var parts = raw.split(',');
+    for (var i = 0; i < parts.length; i++) {
+      var key = $.trim(parts[i]);
+      if (key !== '') {
+        if (keys.indexOf(key) === -1) {
+          keys.push(key);
+        }
       }
     }
     return keys;

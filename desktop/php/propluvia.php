@@ -8,6 +8,58 @@ sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
+<style>
+#usageFilterCheckboxes.usage-filter-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-column-gap: 20px;
+  grid-row-gap: 8px;
+  margin: 0;
+}
+
+.usage-filter-wrapper {
+  width: 100%;
+  min-height: 180px;
+  border: 1px solid #d9d9d9;
+  background-color: #fff;
+  padding: 14px 18px;
+}
+
+#usageFilterCheckboxes .usage-filter-heading {
+  grid-column: 1 / -1;
+  font-weight: 600;
+  margin: 6px 0 2px;
+}
+
+#usageFilterCheckboxes .usage-filter-option {
+  display: flex;
+  align-items: flex-start;
+  white-space: normal;
+  margin: 0;
+}
+
+#usageFilterCheckboxes .usage-filter-option input {
+  margin-top: 3px;
+  margin-right: 6px;
+}
+
+#usageFilterCheckboxes .alert {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.usage-filter-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.usage-filter-actions .btn-group {
+  display: inline-flex;
+}
+</style>
+
 <div class="row row-overflow">
 	<!-- Page d'accueil du plugin -->
 	<div class="col-xs-12 eqLogicThumbnailDisplay">
@@ -158,11 +210,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{Usages affichés}}</label>
                                 <div class="col-sm-8">
-                                        <div id="usageFilterCheckboxes" style="min-height: 180px; max-height: 360px; overflow-y: auto; border: 1px solid #d9d9d9; padding: 10px; background-color: #fff;">
-                                                <div class="alert alert-info">{{La liste des usages sera disponible après un premier rafraîchissement des données.}}</div>
+                                        <div class="usage-filter-wrapper">
+                                                <div id="usageFilterCheckboxes" class="usage-filter-box">
+                                                        <div class="alert alert-info">{{La liste des usages sera disponible après un premier rafraîchissement des données.}}</div>
+                                                </div>
                                         </div>
                                         <input type="hidden" class="eqLogicAttr" data-l1key="configuration" data-l2key="usageFilterIds" id="usageFilterIds" />
-                                        <div class="usage-filter-actions" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:5px;">
+                                        <div class="usage-filter-actions">
                                                 <div class="btn-group" role="group">
                                                         <a class="btn btn-default btn-sm" id="usageFilterSelectAll">{{Tout sélectionner}}</a>
                                                         <a class="btn btn-default btn-sm" id="usageFilterClear">{{Tout décocher}}</a>

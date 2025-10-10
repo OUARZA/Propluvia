@@ -243,6 +243,28 @@ class propluvia extends eqLogic {
     return '';
   }
 
+  private function buildUsageDisplayKey($usage) {
+    if (!is_array($usage)) {
+      return '';
+    }
+    if (!empty($usage['nom'])) {
+      $slug = $this->slugifyUsageLabel($usage['nom']);
+      if ($slug !== '') {
+        return 'display_nom_'.$slug;
+      }
+    }
+    if (!empty($usage['thematique'])) {
+      $slug = $this->slugifyUsageLabel($usage['thematique']);
+      if ($slug !== '') {
+        return 'display_thematique_'.$slug;
+      }
+    }
+    if (isset($usage['id']) && $usage['id'] !== '' && $usage['id'] !== null) {
+      return 'display_id_'.$usage['id'];
+    }
+    return '';
+  }
+
   private function slugifyUsageLabel($label) {
     $label = trim((string) $label);
     if ($label === '') {
@@ -316,7 +338,7 @@ class propluvia extends eqLogic {
   }
 
   public function getUsageOptionsForConfig() {
-    $usageMap = array();
+    $usageGroups = array();
     $usageCommands = array('usages_zone_sup', 'usages_zone_sou', 'usages_zone_aep');
     foreach ($usageCommands as $logicalId) {
       $cmd = $this->getCmd('info', $logicalId);
@@ -343,20 +365,34 @@ class propluvia extends eqLogic {
         if ($key === '') {
           continue;
         }
-        if (!isset($usageMap[$key])) {
-          $usageMap[$key] = array(
-            'key' => $key,
-            'id' => isset($usage['id']) ? $usage['id'] : '',
+        $displayKey = $this->buildUsageDisplayKey($usage);
+        if ($displayKey === '') {
+          $displayKey = $key;
+        }
+        if (!isset($usageGroups[$displayKey])) {
+          $usageGroups[$displayKey] = array(
+            'displayKey' => $displayKey,
+            'keys' => array(),
             'nom' => isset($usage['nom']) ? $usage['nom'] : '',
             'thematique' => isset($usage['thematique']) ? $usage['thematique'] : '',
           );
+        } else {
+          if ($usageGroups[$displayKey]['nom'] === '' && !empty($usage['nom'])) {
+            $usageGroups[$displayKey]['nom'] = $usage['nom'];
+          }
+          if ($usageGroups[$displayKey]['thematique'] === '' && !empty($usage['thematique'])) {
+            $usageGroups[$displayKey]['thematique'] = $usage['thematique'];
+          }
+        }
+        if (!in_array($key, $usageGroups[$displayKey]['keys'], true)) {
+          $usageGroups[$displayKey]['keys'][] = $key;
         }
       }
     }
-    if (empty($usageMap)) {
+    if (empty($usageGroups)) {
       return array();
     }
-    uasort($usageMap, function ($a, $b) {
+    uasort($usageGroups, function ($a, $b) {
       $themeA = isset($a['thematique']) ? strtolower($a['thematique']) : '';
       $themeB = isset($b['thematique']) ? strtolower($b['thematique']) : '';
       if ($themeA === $themeB) {
@@ -364,7 +400,21 @@ class propluvia extends eqLogic {
       }
       return strcmp($themeA, $themeB);
     });
-    return array_values($usageMap);
+    $options = array();
+    foreach ($usageGroups as $group) {
+      $keys = isset($group['keys']) ? array_values($group['keys']) : array();
+      if (empty($keys)) {
+        continue;
+      }
+      $options[] = array(
+        'displayKey' => isset($group['displayKey']) ? $group['displayKey'] : $keys[0],
+        'keys' => $keys,
+        'key' => $keys[0],
+        'nom' => isset($group['nom']) ? $group['nom'] : '',
+        'thematique' => isset($group['thematique']) ? $group['thematique'] : '',
+      );
+    }
+    return $options;
   }
 
   private function getCommonCommandDefinitions() {
