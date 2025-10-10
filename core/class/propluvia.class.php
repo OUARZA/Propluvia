@@ -437,28 +437,34 @@ class propluvia extends eqLogic {
         'order' => 4,
         'default' => __('Non communiqué', __FILE__)
       ),
+      'numero_arrete_cadre' => array(
+        'name' => __('Numéro arrêté cadre', __FILE__),
+        'subType' => 'string',
+        'order' => 5,
+        'default' => __('Non communiqué', __FILE__)
+      ),
       'date_debut' => array(
         'name' => __('Date début arrêté', __FILE__),
         'subType' => 'string',
-        'order' => 5,
+        'order' => 6,
         'default' => ''
       ),
       'date_fin' => array(
         'name' => __('Date fin arrêté', __FILE__),
         'subType' => 'string',
-        'order' => 6,
+        'order' => 7,
         'default' => ''
       ),
       'urlPdf' => array(
         'name' => __('Url arrêté en pdf', __FILE__),
         'subType' => 'string',
-        'order' => 7,
+        'order' => 8,
         'default' => ''
       ),
       'urlPdfCadre' => array(
         'name' => __('Url arrêté cadre', __FILE__),
         'subType' => 'string',
-        'order' => 8,
+        'order' => 9,
         'default' => ''
       ),
     );
@@ -874,6 +880,7 @@ class propluvia extends eqLogic {
 
         $this->updateCommandIfExists('departement', substr($codeInseeCommune, 0, 2));
         $this->updateCommandIfExists('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
+        $this->updateCommandIfExists('numero_arrete_cadre', 'Aucun arrêté trouvé à la date du '.$dateFormat);
         $this->updateCommandIfExists('date_debut', '');
         $this->updateCommandIfExists('date_fin', '');
         $this->updateCommandIfExists('commune', $nomCommune);
@@ -923,7 +930,10 @@ class propluvia extends eqLogic {
             if ($nomUsage === '' && $description === '') {
               continue;
             }
-            $description = str_replace(array("\r\n", "\n", "\r"), '<br/>', $description);
+            if ($description !== '') {
+              $description = str_replace(array("\r\n", "\n", "\r"), ' ', $description);
+              $description = preg_replace('/\s+/u', ' ', $description);
+            }
             if ($nomUsage !== '' && $description !== '') {
               $messages[] = '<b>'.$nomUsage.'</b> : '.$description;
             } else {
@@ -963,6 +973,7 @@ class propluvia extends eqLogic {
         $dateFinValiditeArrete = '';
         $defaultNumeroArrete = __('Non communiqué', __FILE__);
         $numeroArrete = $defaultNumeroArrete;
+        $numeroArreteCadre = $defaultNumeroArrete;
         $urlPdf = '';
         $urlPdfCadre = '';
 
@@ -991,6 +1002,16 @@ class propluvia extends eqLogic {
             }
             if ($urlPdfCadre === '' && !empty($arrete['cheminFichierArreteCadre'])) {
               $urlPdfCadre = $arrete['cheminFichierArreteCadre'];
+            }
+            if ($numeroArreteCadre === $defaultNumeroArrete) {
+              if (!empty($arrete['idArreteCadre'])) {
+                $numeroArreteCadre = $arrete['idArreteCadre'];
+              } elseif (!empty($arrete['cheminFichierArreteCadre'])) {
+                $path = parse_url($arrete['cheminFichierArreteCadre'], PHP_URL_PATH);
+                if (is_string($path) && preg_match('#/(\d+)/[^/]+$#', $path, $matches)) {
+                  $numeroArreteCadre = $matches[1];
+                }
+              }
             }
           }
 
@@ -1048,6 +1069,7 @@ class propluvia extends eqLogic {
 
         log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
         log::add(__CLASS__, 'debug', 'Numéro arrêté          : '.$numeroArrete);
+        log::add(__CLASS__, 'debug', 'Numéro arrêté cadre    : '.$numeroArreteCadre);
         log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
         log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
         log::add(__CLASS__, 'debug', 'Commune                : '.$nomCommune);
@@ -1056,6 +1078,7 @@ class propluvia extends eqLogic {
 
         $this->updateCommandIfExists('departement', $codeInseeDepartement);
         $this->updateCommandIfExists('numero_arrete', $numeroArrete);
+        $this->updateCommandIfExists('numero_arrete_cadre', $numeroArreteCadre);
         $this->updateCommandIfExists('date_debut', $dateDebutValiditeArrete);
         $this->updateCommandIfExists('date_fin', $dateFinValiditeArrete);
         $this->updateCommandIfExists('commune', $nomCommune);

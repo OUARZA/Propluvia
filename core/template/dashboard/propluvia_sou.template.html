@@ -22,33 +22,47 @@
 	<tr>
       	<td><i class='fas fa-pen'></i></td>
         <td id="arreteCell#uid#">
-            <script>
-                var urlPdf = "#urlPdf#";
-                var urlPdfCadre = "#urlPdfCadre#";
-                var numeroArrete = "#numero_arrete#";
-                var numeroTexte = numeroArrete ? numeroArrete.trim() : '';
-                var numeroConnu = numeroTexte !== '' && numeroTexte.toLowerCase() !== 'non communiqué';
-                var arreteContent = '';
+                <script>
+                        (function() {
+                                var urlPdf = "#urlPdf#";
+                                var urlPdfCadre = "#urlPdfCadre#";
+                                var numeroArrete = "#numero_arrete#";
+                                var numeroArreteCadre = "#numero_arrete_cadre#";
 
-                if (urlPdf !== '') {
-                        var numeroLabel = numeroConnu ? "n° " + numeroTexte : "Consulter le PDF";
-                        arreteContent = "Arrêté : <a href='" + urlPdf + "' target='_blank' class='lien-arrete'>" + numeroLabel + "</a>";
-                } else {
-                    arreteContent = "Arrêté : " + numeroArrete;
-                }
+                                var sanitize = function(value) {
+                                        return (value || '').toString().trim();
+                                };
 
-                if (urlPdfCadre !== '') {
-                        arreteContent += "<br/><a href='" + urlPdfCadre + "' target='_blank' class='lien-arrete'>Arrêté cadre</a>";
-                }
+                                var isKnown = function(value) {
+                                        if (value === '') {
+                                                return false;
+                                        }
+                                        var lower = value.toLowerCase();
+                                        return lower !== 'non communiqué' && lower.indexOf('aucun') === -1;
+                                };
 
-                (function() {
-                    var cell = document.getElementById("arreteCell#uid#");
-                    if (!cell) {
-                        return;
-                    }
-                    cell.innerHTML = arreteContent;
-                })();
-            </script>
+                                var buildLine = function(label, url, numero, rawValue) {
+                                        var cleanNumero = sanitize(numero);
+                                        var cleanRaw = sanitize(rawValue);
+                                        var known = isKnown(cleanNumero);
+                                        var fallback = known ? 'N° ' + cleanNumero : (cleanRaw !== '' ? cleanRaw : 'Non communiqué');
+                                        if (url !== '') {
+                                                var linkLabel = known ? 'N° ' + cleanNumero : (isKnown(cleanRaw) ? cleanRaw : 'Consulter le PDF');
+                                                return label + ' : <a href="' + url + '" target="_blank" class="lien-arrete">' + linkLabel + '</a>';
+                                        }
+                                        return label + ' : ' + fallback;
+                                };
+
+                                var restrictionLine = buildLine('Arrêté de restriction', urlPdf, numeroArrete, numeroArrete);
+                                var cadreLine = buildLine('Arrêté cadre', urlPdfCadre, numeroArreteCadre, numeroArreteCadre);
+
+                                var cell = document.getElementById('arreteCell#uid#');
+                                if (!cell) {
+                                        return;
+                                }
+                                cell.innerHTML = restrictionLine + '<br/>' + cadreLine;
+                        })();
+                </script>
         </td>
 	</tr>
     <tr>
@@ -78,8 +92,8 @@
 	</tr>
     <tr>
       	<td colspan="2">
-          <table border="0">
-          <tbody> 
+        <table border="0" class="restriction-scale">
+          <tbody>
             <tr style="border: 1px black;">
               <td style="width: 60px; height: 20px; background-color: #ffffff !important;">#nom_restriction_sou_N1#
               </td>
@@ -97,9 +111,13 @@
       </td>
 	</tr>
     <tr>
-      	<td><i class='fas fa-angle-right'></i></td>
-		<td>Mesures : #editorial_zone_sou#</td>
-	</tr>
+        <td><i class='fas fa-angle-right'></i></td>
+                <td class="mesures-label">&gt; Mesures :</td>
+        </tr>
+    <tr class="mesures-row">
+        <td></td>
+        <td class="mesures-content">#editorial_zone_sou#</td>
+        </tr>
 	</tbody>
 </table>
       </div>

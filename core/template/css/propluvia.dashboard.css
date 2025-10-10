@@ -31,10 +31,25 @@
    		color: black;
 	}
         .lien-arrete {
-        	color: blue !important;
-        	text-decoration: underline !important;
-    	}    
-	.lien-arrete:hover {
-        	color: red !important;
-        	text-decoration: underline !important;
-    	}
+                color: blue !important;
+                text-decoration: underline !important;
+        }
+        .lien-arrete:hover {
+                color: red !important;
+                text-decoration: underline !important;
+        }
+        .restriction-scale {
+                margin: 0 auto;
+        }
+        .tableau .mesures-label,
+        .tableau .mesures-content,
+        .tableau .mesures-row td {
+                background-color: transparent !important;
+        }
+        .tableau .mesures-label {
+                font-weight: bold;
+        }
+        .tableau .mesures-content {
+                text-align: left;
+                white-space: normal;
+        }
