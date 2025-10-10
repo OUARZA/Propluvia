@@ -21,7 +21,7 @@
         </tr>
         <tr>
         <td><i class='fas fa-pen'></i></td>
-        <td id="arreteCell">
+        <td id="arreteCell#uid#">
             <script>
                 var urlPdf = "#urlPdf#";
                 var urlPdfCadre = "#urlPdfCadre#";
@@ -41,7 +41,13 @@
                         arreteContent += "<br/><a href='" + urlPdfCadre + "' target='_blank' class='lien-arrete'>Arrêté cadre</a>";
                 }
 
-                document.getElementById("arreteCell").innerHTML = arreteContent;
+                (function() {
+                    var cell = document.getElementById("arreteCell#uid#");
+                    if (!cell) {
+                        return;
+                    }
+                    cell.innerHTML = arreteContent;
+                })();
             </script>
         </td>
         </tr>
