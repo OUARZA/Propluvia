@@ -359,12 +359,6 @@ class propluvia extends eqLogic {
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
     $typeInfo = $this->getConfiguration('typeInfo');
     $typeRestriction = $this->getConfiguration('typeRestriction');
-    if (!empty($typeInfo)){
-      $typeInfo = '_'.$typeInfo;
-    } else {
-      $typeInfo = '';
-    }
-    $trans = array(" " => "_", "é" => "e", "è" => "e");
     $eqName = $this->getName();
     log::add(__CLASS__, 'debug', ' ');
     log::add(__CLASS__, 'debug', '*********** PROPLUVIA ['.$eqName.'] ***********');
@@ -391,11 +385,23 @@ class propluvia extends eqLogic {
       log::add(__CLASS__, 'error', 'Code INSEE de commune ('.$codeInseeCommune.') invalide');
     }
 
-    //récupération info arrêté
-    $url = 'https://eau.api.agriculture.gouv.fr/apis/propluvia/arretes/'.$date.'/commune/'.$codeInseeCommune;
+    //récupération info zones Vigieau
+    $profil = '';
+    switch ($typeInfo) {
+      case 'part':
+        $profil = 'particulier';
+        break;
+      case 'pro':
+        $profil = 'professionnel';
+        break;
+    }
+    $url = 'https://api.vigieau.beta.gouv.fr/api/zones?commune='.$codeInseeCommune;
+    if ($profil !== '') {
+      $url .= '&profil='.$profil;
+    }
     $ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
- 	curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);   
 	curl_setopt($ch, CURLOPT_TIMEOUT, 15);         
@@ -407,15 +413,13 @@ class propluvia extends eqLogic {
   	$jsonData = json_decode($response, true);  
      
     if(!is_array($jsonData)){
-    	log::add(__CLASS__, 'error', 'le site \'https://eau.api.agriculture.gouv.fr\' renvoie une erreur ou n\'est pas accessible');        
-    } else {      
+        log::add(__CLASS__, 'error', 'le site \'https://api.vigieau.beta.gouv.fr\' renvoie une erreur ou n\'est pas accessible');
+    } else {
       //sauvegarde date et heure de récupérations des info Propluvia
       $this->setConfiguration('lastActuPropluvia', time())->save();
-      //vérifie qu'un arrêté existe
-      if ($jsonData['message'] != NULL) {
-        log::add(__CLASS__, 'info', 'Aucun arrêté trouvé à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
+      if (count($jsonData) === 0) {
+        log::add(__CLASS__, 'info', 'Aucune donnée trouvée à la date du '.$dateFormat. ' pour la commune '.$nomCommune);
 
-        // mise à jour des commandes
         $this->checkAndUpdateCmd('departement', substr($codeInseeCommune, 0, 2));
         $this->checkAndUpdateCmd('numero_arrete', 'Aucun arrêté trouvé à la date du '.$dateFormat);
         $this->checkAndUpdateCmd('date_debut', '');
@@ -423,22 +427,94 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('commune', $nomCommune);
         $this->checkAndUpdateCmd('nom_zone_sup', '');
         $this->checkAndUpdateCmd('niveau_restriction_sup', 0);
-        $this->checkAndUpdateCmd('nom_restriction_sup', '');      
-        $this->checkAndUpdateCmd('editorial_zone_sup', '');      
+        $this->checkAndUpdateCmd('nom_restriction_sup', '');
+        $this->checkAndUpdateCmd('editorial_zone_sup', '');
         $this->checkAndUpdateCmd('nom_zone_sou', '');
         $this->checkAndUpdateCmd('niveau_restriction_sou', 0);
-        $this->checkAndUpdateCmd('nom_restriction_sou', '');      
+        $this->checkAndUpdateCmd('nom_restriction_sou', '');
         $this->checkAndUpdateCmd('editorial_zone_sou', '');
         $this->checkAndUpdateCmd('urlPdf', '');
-        
       } else {
-        $codeInseeDepartement = $jsonData[0]['codeInseeDepartement'];
-        $dateDebutValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateDebutValiditeArrete']));
-        $dateFinValiditeArrete = date("d/m/Y",strtotime($jsonData[0]['dateFinValiditeArrete']));
-        $numeroArrete = $jsonData[0]['numeroArrete'];
-        $urlPdf = 'https://eau.api.agriculture.gouv.fr/apis/propluvia/file/pdf/'.$jsonData[0]['fdCdn'];
-        //mise à jour des commandes et log avec info arrêté
-      	log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
+        $levelMapping = array(
+          'vigilance' => array('label' => __('Vigilance', __FILE__), 'value' => 1),
+          'alerte' => array('label' => __('Alerte', __FILE__), 'value' => 3),
+          'alerte_renforcee' => array('label' => __('Alerte renforcée', __FILE__), 'value' => 4),
+          'crise' => array('label' => __('Crise', __FILE__), 'value' => 5),
+          'crise_renforcee' => array('label' => __('Crise renforcée', __FILE__), 'value' => 5),
+          'aucune' => array('label' => __('Aucune restriction', __FILE__), 'value' => 0),
+        );
+
+        $buildEditorial = function ($usages) use ($typeInfo) {
+          $messages = array();
+          foreach ($usages as $usage) {
+            if (!is_array($usage)) {
+              continue;
+            }
+            $shouldAdd = false;
+            switch ($typeInfo) {
+              case 'part':
+                $shouldAdd = isset($usage['concerneParticulier']) ? $usage['concerneParticulier'] : false;
+                break;
+              case 'pro':
+                $shouldAdd = isset($usage['concerneEntreprise']) ? $usage['concerneEntreprise'] : false;
+                break;
+              default:
+                $shouldAdd = true;
+                break;
+            }
+            if (!$shouldAdd) {
+              continue;
+            }
+            $nomUsage = isset($usage['nom']) ? trim($usage['nom']) : '';
+            $description = isset($usage['description']) ? trim($usage['description']) : '';
+            if ($nomUsage === '' && $description === '') {
+              continue;
+            }
+            $description = str_replace(array("\r\n", "\n", "\r"), '<br/>', $description);
+            if ($nomUsage !== '' && $description !== '') {
+              $messages[] = '<b>'.$nomUsage.'</b> : '.$description;
+            } else {
+              $messages[] = $nomUsage.$description;
+            }
+          }
+          if (count($messages) === 0) {
+            return __('Aucune information disponible', __FILE__);
+          }
+          return implode('<br/><br/>', $messages);
+        };
+
+        $codeInseeDepartement = substr($codeInseeCommune, 0, 2);
+        $dateDebutValiditeArrete = '';
+        $dateFinValiditeArrete = '';
+        $numeroArrete = __('Non communiqué', __FILE__);
+        $urlPdf = '';
+
+        foreach ($jsonData as $zone) {
+          if (!is_array($zone)) {
+            continue;
+          }
+          if (!empty($zone['departement'])) {
+            $codeInseeDepartement = $zone['departement'];
+          }
+          if (isset($zone['arrete']) && is_array($zone['arrete'])) {
+            $arrete = $zone['arrete'];
+            if (!empty($arrete['dateDebutValidite'])) {
+              $dateDebutValiditeArrete = date('d/m/Y', strtotime($arrete['dateDebutValidite']));
+            }
+            if (!empty($arrete['dateFinValidite'])) {
+              $dateFinValiditeArrete = date('d/m/Y', strtotime($arrete['dateFinValidite']));
+            }
+            if (!empty($arrete['id'])) {
+              $numeroArrete = $arrete['id'];
+            }
+            if (!empty($arrete['cheminFichier'])) {
+              $urlPdf = $arrete['cheminFichier'];
+            }
+            break;
+          }
+        }
+
+        log::add(__CLASS__, 'debug', 'Département            : '.$codeInseeDepartement);
         log::add(__CLASS__, 'debug', 'Numéro arrêté          : '.$numeroArrete);
         log::add(__CLASS__, 'debug', 'Début validité arrêté  : '.$dateDebutValiditeArrete);
         log::add(__CLASS__, 'debug', 'Fin validité arrêté    : '.$dateFinValiditeArrete);
@@ -451,58 +527,82 @@ class propluvia extends eqLogic {
         $this->checkAndUpdateCmd('date_fin', $dateFinValiditeArrete);
         $this->checkAndUpdateCmd('commune', $nomCommune);
         $this->checkAndUpdateCmd('urlPdf', $urlPdf);
-                
-       //balayage des zones
-        foreach ($jsonData[0]['restrictions'] as $value=>$jsonKey) {       
-          $niveauRestriction = $jsonKey['niveauRestriction'];
-          $nomNiveau = $jsonKey['nomNiveau'];
-          $nomZone =  $jsonKey['zoneAlerte']['nomZone'];
-          $typeZone = $jsonKey['zoneAlerte']['typeZone'];
 
-          //balayage des communes pour récupérer uniquement info de celle recherchée
-          foreach ($jsonKey['zoneAlerte']['communes'] as $value2=>$jsonKey2) {
-            if ( $jsonKey2['codeInseeCommune'] == $codeInseeCommune) {
-              //recupération info détaillé sur le niveau d'alerte
-              $url_legende = 'https://eau.api.agriculture.gouv.fr/apis/propluvia/editoriaux/?idEditorial=legende_'.strtr(strtolower($nomNiveau),$trans).$typeInfo;   
-              $ch = curl_init();
-              curl_setopt($ch, CURLOPT_URL, $url_legende);
-              curl_setopt($ch, CURLOPT_HEADER, false);
-              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-              curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);   
-              curl_setopt($ch, CURLOPT_TIMEOUT, 15);         
-              curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-              curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
-              curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-              $response = curl_exec($ch);
-              curl_close($ch);
-              $legende = json_decode($response, true);  
-            
-              if(is_array($legende)){
-                  $contenuEditorial = $legende[0]['contenuEditorial'];
-              } else {
-                  $contenuEditorial = 'Aucune information disponible';
-              }
+        $zoneValues = array(
+          'SUP' => array(
+            'nom' => '',
+            'niveau' => 0,
+            'label' => '',
+            'editorial' => ''
+          ),
+          'SOU' => array(
+            'nom' => '',
+            'niveau' => 0,
+            'label' => '',
+            'editorial' => ''
+          )
+        );
 
-              //affichage résultat dans le log
-              log::add(__CLASS__, 'debug', '----------'.strtoupper($nomZone.' ['.$typeZone.']').'----------');
-              log::add(__CLASS__, 'debug', 'Niveau >> '.$nomNiveau.' ('.$niveauRestriction.')');
-              log::add(__CLASS__, 'debug', $contenuEditorial);
-
-              //mise à jour des commmandes
-              if ($typeZone == 'SUP' && ($typeRestriction == 'sup' || $typeRestriction == 'all')) {
-                $this->checkAndUpdateCmd('nom_zone_sup', $nomZone);
-                $this->checkAndUpdateCmd('niveau_restriction_sup', $niveauRestriction);
-                $this->checkAndUpdateCmd('nom_restriction_sup', $nomNiveau);      
-                $this->checkAndUpdateCmd('editorial_zone_sup', $contenuEditorial);
-              }
-              if ($typeZone == 'SOU' && ($typeRestriction == 'sou' || $typeRestriction == 'all')) {
-                $this->checkAndUpdateCmd('nom_zone_sou', $nomZone);
-                $this->checkAndUpdateCmd('niveau_restriction_sou', $niveauRestriction);
-                $this->checkAndUpdateCmd('nom_restriction_sou', $nomNiveau);      
-                $this->checkAndUpdateCmd('editorial_zone_sou', $contenuEditorial);      
-              } 
-            }
+        foreach ($jsonData as $zone) {
+          if (!is_array($zone)) {
+            continue;
           }
+          $typeZone = isset($zone['type']) ? strtoupper($zone['type']) : '';
+          if (!isset($zoneValues[$typeZone])) {
+            continue;
+          }
+          $nomZone = isset($zone['nom']) ? $zone['nom'] : '';
+          $niveauGravite = isset($zone['niveauGravite']) ? strtolower($zone['niveauGravite']) : '';
+          $usages = isset($zone['usages']) && is_array($zone['usages']) ? $zone['usages'] : array();
+
+          $niveauRestriction = 0;
+          $nomNiveau = '';
+          if (isset($levelMapping[$niveauGravite])) {
+            $niveauRestriction = $levelMapping[$niveauGravite]['value'];
+            $nomNiveau = $levelMapping[$niveauGravite]['label'];
+          } elseif ($niveauGravite !== '') {
+            $niveauRestriction = 0;
+            $nomNiveau = ucfirst($niveauGravite);
+          }
+
+          $editorial = $buildEditorial($usages);
+
+          log::add(__CLASS__, 'debug', '----------'.strtoupper($nomZone.' ['.$typeZone.']').'----------');
+          log::add(__CLASS__, 'debug', 'Niveau >> '.$nomNiveau.' ('.$niveauRestriction.')');
+          log::add(__CLASS__, 'debug', strip_tags(str_replace('<br/>', ' | ', $editorial)));
+
+          $zoneValues[$typeZone] = array(
+            'nom' => $nomZone,
+            'niveau' => $niveauRestriction,
+            'label' => $nomNiveau,
+            'editorial' => $editorial,
+          );
+        }
+
+        if ($typeRestriction == 'sup' || $typeRestriction == 'all') {
+          $this->checkAndUpdateCmd('nom_zone_sup', $zoneValues['SUP']['nom']);
+          $this->checkAndUpdateCmd('niveau_restriction_sup', $zoneValues['SUP']['niveau']);
+          $this->checkAndUpdateCmd('nom_restriction_sup', $zoneValues['SUP']['label']);
+          $this->checkAndUpdateCmd('editorial_zone_sup', $zoneValues['SUP']['editorial']);
+        }
+        if ($typeRestriction == 'sou' || $typeRestriction == 'all') {
+          $this->checkAndUpdateCmd('nom_zone_sou', $zoneValues['SOU']['nom']);
+          $this->checkAndUpdateCmd('niveau_restriction_sou', $zoneValues['SOU']['niveau']);
+          $this->checkAndUpdateCmd('nom_restriction_sou', $zoneValues['SOU']['label']);
+          $this->checkAndUpdateCmd('editorial_zone_sou', $zoneValues['SOU']['editorial']);
+        }
+
+        if ($typeRestriction == 'sup') {
+          $this->checkAndUpdateCmd('nom_zone_sou', '');
+          $this->checkAndUpdateCmd('niveau_restriction_sou', 0);
+          $this->checkAndUpdateCmd('nom_restriction_sou', '');
+          $this->checkAndUpdateCmd('editorial_zone_sou', '');
+        }
+        if ($typeRestriction == 'sou') {
+          $this->checkAndUpdateCmd('nom_zone_sup', '');
+          $this->checkAndUpdateCmd('niveau_restriction_sup', 0);
+          $this->checkAndUpdateCmd('nom_restriction_sup', '');
+          $this->checkAndUpdateCmd('editorial_zone_sup', '');
         }
       }
     }
