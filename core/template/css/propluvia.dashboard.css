@@ -3,15 +3,21 @@
 	src: url("fonts/Barcelona.otf") format("opentype");
 	}
 
-	.tableau{
-      		background-color: #C9EBF8 !important;
-      		border: 5px solid #FFFFFF;
-      		border-radius: 20px !important;
-  		border-spacing:5px;
-      		border-collapse: separate;
-      		color: #000000 !important;
-      		columns:2;
-	}
+        .tableau{
+                background-color: #C9EBF8 !important;
+                border: 5px solid #FFFFFF;
+                border-radius: 20px !important;
+                border-spacing:5px;
+                border-collapse: separate;
+                color: #000000 !important;
+                columns:2;
+        }
+
+        .tableau tr,
+        .tableau th,
+        .tableau td {
+                background-color: #C9EBF8 !important;
+        }
 
   	.tableaux{
   		display:inline-block;
@@ -23,10 +29,9 @@
 	}
 	.demo th {
 	}
-	.tableau td {
-		padding:2px;
-     		background-color: #C9EBF8 !important;
-    	}
+        .tableau td {
+                padding:2px;
+        }
 	.fa-mixer{
    		color: black;
 	}
@@ -42,7 +47,7 @@
                 margin: 0 auto;
         }
         .tableau .mesures-row td {
-                background-color: rgba(201, 235, 248, 0.9) !important;
+                background-color: #C9EBF8 !important;
                 color: #000000 !important;
         }
         .tableau .mesures-label {
@@ -51,5 +56,5 @@
         .tableau .mesures-content {
                 text-align: left;
                 white-space: normal;
-                background-color: transparent !important;
+                background-color: #C9EBF8 !important;
         }
