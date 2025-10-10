@@ -145,28 +145,31 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                         	</div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{Type éditorial}}</label>
+                                <label class="col-sm-4 control-label">{{Type d'usage}}</label>
                                 <div class="col-sm-3">
                                   <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeInfo">
-                                    <option value="part">{{Particulier}}</option>
-                                    <option value="pro">{{Profesionnel}}</option>
-                                    <option value="">{{Tout}}</option>
+                                    <option value="particulier">{{Particulier}}</option>
+                                    <option value="entreprise">{{Entreprise}}</option>
+                                    <option value="collectivites">{{Collectivités}}</option>
+                                    <option value="exploitation_agricole">{{Exploitation agricole}}</option>
                                   </select>
                                 </div>
                                 </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{Usages affichés}}</label>
-                                <div class="col-sm-6" id="usageFilterCheckboxes">
-                                        <div class="alert alert-info">{{La liste des usages sera disponible après un premier rafraîchissement des données.}}</div>
-                                </div>
-                                <div class="col-sm-2">
-                                        <div class="btn-group" style="margin-bottom:5px;">
-                                                <a class="btn btn-default btn-sm" id="usageFilterSelectAll">{{Tout sélectionner}}</a>
-                                                <a class="btn btn-default btn-sm" id="usageFilterClear">{{Tout décocher}}</a>
+                                <div class="col-sm-8">
+                                        <div id="usageFilterCheckboxes" style="min-height: 180px; max-height: 360px; overflow-y: auto; border: 1px solid #d9d9d9; padding: 10px; background-color: #fff;">
+                                                <div class="alert alert-info">{{La liste des usages sera disponible après un premier rafraîchissement des données.}}</div>
                                         </div>
-                                        <a class="btn btn-default btn-sm" id="usageFilterReload">{{Actualiser la liste}}</a>
+                                        <input type="hidden" class="eqLogicAttr" data-l1key="configuration" data-l2key="usageFilterIds" id="usageFilterIds" />
+                                        <div class="usage-filter-actions" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:5px;">
+                                                <div class="btn-group" role="group">
+                                                        <a class="btn btn-default btn-sm" id="usageFilterSelectAll">{{Tout sélectionner}}</a>
+                                                        <a class="btn btn-default btn-sm" id="usageFilterClear">{{Tout décocher}}</a>
+                                                </div>
+                                                <a class="btn btn-default btn-sm" id="usageFilterReload">{{Actualiser la liste}}</a>
+                                        </div>
                                 </div>
-                                <input type="hidden" class="eqLogicAttr" data-l1key="configuration" data-l2key="usageFilterIds" id="usageFilterIds" />
                                 </div>
                                                 </div>
 

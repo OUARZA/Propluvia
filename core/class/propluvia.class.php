@@ -265,6 +265,56 @@ class propluvia extends eqLogic {
     return trim($fallback, '_');
   }
 
+  private function normalizeTypeInfo($typeInfo) {
+    $value = trim((string) $typeInfo);
+    if ($value === '') {
+      return '';
+    }
+    $normalized = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+    if ($normalized !== false && $normalized !== null) {
+      $value = $normalized;
+    }
+    $value = strtolower($value);
+    $value = str_replace(array(' ', '-'), '_', $value);
+    switch ($value) {
+      case 'part':
+      case 'particulier':
+        return 'particulier';
+      case 'pro':
+      case 'professionnel':
+      case 'entreprise':
+        return 'entreprise';
+      case 'collectivite':
+      case 'collectivites':
+        return 'collectivites';
+      case 'exploitation':
+      case 'exploitation_agricole':
+      case 'exploitationagricole':
+      case 'agricole':
+        return 'exploitation_agricole';
+      case 'all':
+      case 'tout':
+        return '';
+      default:
+        return '';
+    }
+  }
+
+  private function getAudienceFieldForType($typeInfo) {
+    switch ($typeInfo) {
+      case 'particulier':
+        return 'concerneParticulier';
+      case 'entreprise':
+        return 'concerneEntreprise';
+      case 'collectivites':
+        return 'concerneCollectivite';
+      case 'exploitation_agricole':
+        return 'concerneExploitation';
+      default:
+        return '';
+    }
+  }
+
   public function getUsageOptionsForConfig() {
     $usageMap = array();
     $usageCommands = array('usages_zone_sup', 'usages_zone_sou', 'usages_zone_aep');
@@ -705,7 +755,8 @@ class propluvia extends eqLogic {
     $date = date('Y-m-d');
 	$dateFormat = date('d/m/Y');
     $codeInseeCommune = $this->getConfiguration('codeInseeCommune');
-    $typeInfo = $this->getConfiguration('typeInfo');
+    $typeInfoRaw = $this->getConfiguration('typeInfo');
+    $typeInfo = $this->normalizeTypeInfo($typeInfoRaw);
     $typeRestriction = $this->getConfiguration('typeRestriction');
     $eqName = $this->getName();
     log::add(__CLASS__, 'debug', ' ');
@@ -735,13 +786,14 @@ class propluvia extends eqLogic {
 
     //récupération info zones Vigieau
     $profil = '';
-    switch ($typeInfo) {
-      case 'part':
-        $profil = 'particulier';
-        break;
-      case 'pro':
-        $profil = 'professionnel';
-        break;
+    $profilMapping = array(
+      'particulier' => 'particulier',
+      'entreprise' => 'entreprise',
+      'collectivites' => 'collectivites',
+      'exploitation_agricole' => 'exploitation_agricole',
+    );
+    if (isset($profilMapping[$typeInfo])) {
+      $profil = $profilMapping[$typeInfo];
     }
     $url = 'https://api.vigieau.beta.gouv.fr/api/zones?commune='.$codeInseeCommune;
     if ($profil !== '') {
@@ -792,8 +844,9 @@ class propluvia extends eqLogic {
         );
 
         $enabledUsageKeys = $this->getEnabledUsageKeys();
+        $audienceField = $this->getAudienceFieldForType($typeInfo);
         $self = $this;
-        $buildEditorial = function ($usages) use ($typeInfo, $enabledUsageKeys, $self) {
+        $buildEditorial = function ($usages) use ($enabledUsageKeys, $self, $audienceField) {
           $messages = array();
           foreach ($usages as $usage) {
             if (!is_array($usage)) {
@@ -805,17 +858,10 @@ class propluvia extends eqLogic {
                 continue;
               }
             }
-            $shouldAdd = false;
-            switch ($typeInfo) {
-              case 'part':
-                $shouldAdd = isset($usage['concerneParticulier']) ? $usage['concerneParticulier'] : false;
-                break;
-              case 'pro':
-                $shouldAdd = isset($usage['concerneEntreprise']) ? $usage['concerneEntreprise'] : false;
-                break;
-              default:
-                $shouldAdd = true;
-                break;
+            $shouldAdd = true;
+            if ($audienceField !== '') {
+              $audienceValue = isset($usage[$audienceField]) ? $usage[$audienceField] : false;
+              $shouldAdd = ($audienceValue === true || $audienceValue === 1 || $audienceValue === '1' || $audienceValue === 'true');
             }
             if (!$shouldAdd) {
               continue;
