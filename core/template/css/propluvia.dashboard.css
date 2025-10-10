@@ -41,10 +41,9 @@
         .restriction-scale {
                 margin: 0 auto;
         }
-        .tableau .mesures-label,
-        .tableau .mesures-content,
         .tableau .mesures-row td {
-                background-color: transparent !important;
+                background-color: rgba(201, 235, 248, 0.9) !important;
+                color: #000000 !important;
         }
         .tableau .mesures-label {
                 font-weight: bold;
@@ -52,4 +51,5 @@
         .tableau .mesures-content {
                 text-align: left;
                 white-space: normal;
+                background-color: transparent !important;
         }
