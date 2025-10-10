@@ -145,3 +145,180 @@ function addCmdToTable(_cmd) {
         })*/
     }
 }
+
+var propluviaUsageFilterManager = {
+  currentEqId: null,
+  refresh: function (force) {
+    var $eqIdInput = $('.eqLogicAttr[data-l1key=id]');
+    if ($eqIdInput.length === 0) {
+      return;
+    }
+    var eqId = $eqIdInput.value();
+    if (!eqId) {
+      this.currentEqId = null;
+      this.render([], this.getSelectedKeysFromConfig(), true);
+      return;
+    }
+    if (!force && this.currentEqId === eqId) {
+      this.applySelection(this.getSelectedKeysFromConfig());
+      return;
+    }
+    var self = this;
+    $.ajax({
+      type: 'POST',
+      url: 'plugins/propluvia/core/ajax/propluvia.ajax.php',
+      dataType: 'json',
+      data: {
+        action: 'getUsageOptions',
+        id: eqId
+      },
+      error: function () {
+        self.renderError("Impossible de récupérer la liste des usages. Veuillez rafraîchir l'équipement.");
+      },
+      success: function (data) {
+        if (!data || data.state !== 'ok') {
+          var message = (data && data.result) ? data.result : "Erreur lors de la récupération des usages.";
+          self.renderError(message);
+          return;
+        }
+        self.currentEqId = eqId;
+        var options = $.isArray(data.result) ? data.result : [];
+        self.render(options, self.getSelectedKeysFromConfig(), false);
+      }
+    });
+  },
+  render: function (options, selectedKeys, isInitial) {
+    var $container = $('#usageFilterCheckboxes');
+    if ($container.length === 0) {
+      return;
+    }
+    $container.empty();
+    if (!options.length) {
+      var infoMessage = isInitial ? 'La liste des usages sera disponible après un premier rafraîchissement des données.' : "Aucun usage n\'a été trouvé pour cet équipement.";
+      $container.append($('<div class="alert alert-info"></div>').text(infoMessage));
+      this.syncHiddenFromCheckboxes(true, selectedKeys);
+      return;
+    }
+    var lastThematique = null;
+    for (var i = 0; i < options.length; i++) {
+      var option = options[i];
+      var thematique = option.thematique || '';
+      if (thematique !== lastThematique) {
+        var $heading = $('<div class="usage-filter-heading"></div>').text(thematique !== '' ? thematique : 'Autres usages');
+        $container.append($heading);
+        lastThematique = thematique;
+      }
+      var key = option.key;
+      if (!key) {
+        continue;
+      }
+      var $label = $('<label class="checkbox-inline usage-filter-option"></label>');
+      var $checkbox = $('<input type="checkbox" class="usage-filter-checkbox" />').attr('data-usage-key', key);
+      $label.append($checkbox);
+      var nom = option.nom || key;
+      $label.append(document.createTextNode(' ' + nom));
+      $container.append($label);
+    }
+    this.applySelection(selectedKeys);
+  },
+  applySelection: function (selectedKeys) {
+    var $container = $('#usageFilterCheckboxes');
+    if ($container.length === 0) {
+      return;
+    }
+    var hasStoredSelection = $.isArray(selectedKeys) && selectedKeys.length > 0;
+    $container.find('.usage-filter-checkbox').each(function () {
+      var key = $(this).attr('data-usage-key');
+      if (hasStoredSelection) {
+        $(this).prop('checked', selectedKeys.indexOf(key) !== -1);
+      } else {
+        $(this).prop('checked', true);
+      }
+    });
+    this.syncHiddenFromCheckboxes(true, selectedKeys);
+  },
+  syncHiddenFromCheckboxes: function (isInitial, initialKeys) {
+    var $container = $('#usageFilterCheckboxes');
+    var $hidden = $('#usageFilterIds');
+    if ($container.length === 0 || $hidden.length === 0) {
+      return;
+    }
+    var checkedKeys = [];
+    $container.find('.usage-filter-checkbox:checked').each(function () {
+      checkedKeys.push($(this).attr('data-usage-key'));
+    });
+    var totalCheckboxes = $container.find('.usage-filter-checkbox').length;
+    if (totalCheckboxes === 0) {
+      $hidden.value('');
+      return;
+    }
+    if (isInitial === true && (!$.isArray(initialKeys) || initialKeys.length === 0) && checkedKeys.length === totalCheckboxes) {
+      $hidden.value('');
+      return;
+    }
+    if (checkedKeys.length === totalCheckboxes) {
+      $hidden.value('');
+    } else {
+      $hidden.value(checkedKeys.join(','));
+    }
+  },
+  getSelectedKeysFromConfig: function () {
+    var $hidden = $('#usageFilterIds');
+    if ($hidden.length === 0) {
+      return [];
+    }
+    var raw = $hidden.value();
+    if (typeof raw !== 'string' || raw === '') {
+      return [];
+    }
+    var parts = raw.split(',');
+    var keys = [];
+    for (var i = 0; i < parts.length; i++) {
+      var key = $.trim(parts[i]);
+      if (key !== '') {
+        keys.push(key);
+      }
+    }
+    return keys;
+  },
+  renderError: function (message) {
+    var $container = $('#usageFilterCheckboxes');
+    if ($container.length === 0) {
+      return;
+    }
+    $container.empty().append($('<div class="alert alert-danger"></div>').text(message));
+  }
+};
+
+$(document).on('change', '.eqLogicAttr[data-l1key=id]', function () {
+  propluviaUsageFilterManager.currentEqId = null;
+  propluviaUsageFilterManager.refresh(true);
+});
+
+$(document).on('click', '#usageFilterReload', function (e) {
+  e.preventDefault();
+  propluviaUsageFilterManager.currentEqId = null;
+  propluviaUsageFilterManager.refresh(true);
+});
+
+$(document).on('click', '#usageFilterSelectAll', function (e) {
+  e.preventDefault();
+  var $container = $('#usageFilterCheckboxes');
+  $container.find('.usage-filter-checkbox').prop('checked', true);
+  propluviaUsageFilterManager.syncHiddenFromCheckboxes(false);
+});
+
+$(document).on('click', '#usageFilterClear', function (e) {
+  e.preventDefault();
+  var $container = $('#usageFilterCheckboxes');
+  $container.find('.usage-filter-checkbox').prop('checked', false);
+  propluviaUsageFilterManager.syncHiddenFromCheckboxes(false);
+});
+
+$(document).on('change', '#usageFilterCheckboxes .usage-filter-checkbox', function () {
+  propluviaUsageFilterManager.syncHiddenFromCheckboxes(false);
+});
+
+$(document).ready(function () {
+  propluviaUsageFilterManager.refresh(false);
+});

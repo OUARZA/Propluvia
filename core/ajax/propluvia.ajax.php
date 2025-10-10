@@ -29,9 +29,22 @@ try {
   */
     ajax::init();
 
-
-
-    throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
+    switch (init('action')) {
+      case 'getUsageOptions':
+        $eqId = init('id');
+        if (empty($eqId)) {
+          throw new Exception(__('Identifiant d\'équipement manquant', __FILE__));
+        }
+        $eqLogic = propluvia::byId($eqId);
+        if (!is_object($eqLogic)) {
+          throw new Exception(__('Équipement introuvable', __FILE__));
+        }
+        $options = $eqLogic->getUsageOptionsForConfig();
+        ajax::success($options);
+        break;
+      default:
+        throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
+    }
     /*     * *********Catch exeption*************** */
 }
 catch (Exception $e) {

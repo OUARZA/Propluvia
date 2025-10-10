@@ -145,7 +145,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                         	</div>
                             <div class="form-group">
-                            	<label class="col-sm-4 control-label">{{Type éditorial}}</label>
+                                <label class="col-sm-4 control-label">{{Type éditorial}}</label>
                                 <div class="col-sm-3">
                                   <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="typeInfo">
                                     <option value="part">{{Particulier}}</option>
@@ -153,10 +153,24 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <option value="">{{Tout}}</option>
                                   </select>
                                 </div>
-                        	</div>
-						</div>
+                                </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{Usages affichés}}</label>
+                                <div class="col-sm-6" id="usageFilterCheckboxes">
+                                        <div class="alert alert-info">{{La liste des usages sera disponible après un premier rafraîchissement des données.}}</div>
+                                </div>
+                                <div class="col-sm-2">
+                                        <div class="btn-group" style="margin-bottom:5px;">
+                                                <a class="btn btn-default btn-sm" id="usageFilterSelectAll">{{Tout sélectionner}}</a>
+                                                <a class="btn btn-default btn-sm" id="usageFilterClear">{{Tout décocher}}</a>
+                                        </div>
+                                        <a class="btn btn-default btn-sm" id="usageFilterReload">{{Actualiser la liste}}</a>
+                                </div>
+                                <input type="hidden" class="eqLogicAttr" data-l1key="configuration" data-l2key="usageFilterIds" id="usageFilterIds" />
+                                </div>
+                                                </div>
 
-						<!-- Partie droite de l'onglet "Équipement" -->
+                                                <!-- Partie droite de l'onglet "Équipement" -->
 						<div class="col-lg-6">
 							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
 							

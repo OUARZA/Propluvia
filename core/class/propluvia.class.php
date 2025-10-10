@@ -189,6 +189,134 @@ class propluvia extends eqLogic {
     }
   }
 
+  private function getEnabledUsageKeys() {
+    $raw = $this->getConfiguration('usageFilterIds', '');
+    if (is_array($raw)) {
+      $keys = array();
+      foreach ($raw as $key => $value) {
+        if (is_int($key)) {
+          $stringValue = trim((string) $value);
+          if ($stringValue !== '') {
+            $keys[] = $stringValue;
+          }
+          continue;
+        }
+        if ($value === true || $value === 1 || $value === '1' || $value === 'on') {
+          $keys[] = (string) $key;
+        }
+      }
+      return array_values(array_unique($keys));
+    }
+    if (is_string($raw) && $raw !== '') {
+      $parts = explode(',', $raw);
+      $keys = array();
+      foreach ($parts as $part) {
+        $trimmed = trim($part);
+        if ($trimmed !== '') {
+          $keys[] = $trimmed;
+        }
+      }
+      return array_values(array_unique($keys));
+    }
+    return array();
+  }
+
+  private function buildUsageKey($usage) {
+    if (!is_array($usage)) {
+      return '';
+    }
+    if (isset($usage['id']) && $usage['id'] !== '' && $usage['id'] !== null) {
+      return (string) $usage['id'];
+    }
+    if (!empty($usage['nom'])) {
+      $slug = $this->slugifyUsageLabel($usage['nom']);
+      if ($slug !== '') {
+        return 'nom_'.$slug;
+      }
+    }
+    if (!empty($usage['thematique'])) {
+      $slug = $this->slugifyUsageLabel($usage['thematique']);
+      if ($slug !== '') {
+        return 'thematique_'.$slug;
+      }
+    }
+    return '';
+  }
+
+  private function slugifyUsageLabel($label) {
+    $label = trim((string) $label);
+    if ($label === '') {
+      return '';
+    }
+    $normalized = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $label);
+    if ($normalized !== false && $normalized !== null) {
+      $label = $normalized;
+    }
+    $labelLower = strtolower($label);
+    $labelSlug = preg_replace('/[^a-z0-9]+/', '_', $labelLower);
+    if (!is_string($labelSlug)) {
+      $labelSlug = '';
+    }
+    $labelSlug = trim($labelSlug, '_');
+    if ($labelSlug !== '') {
+      return $labelSlug;
+    }
+    $fallback = strtolower(preg_replace('/\s+/', '_', trim((string) $label)));
+    return trim($fallback, '_');
+  }
+
+  public function getUsageOptionsForConfig() {
+    $usageMap = array();
+    $usageCommands = array('usages_zone_sup', 'usages_zone_sou', 'usages_zone_aep');
+    foreach ($usageCommands as $logicalId) {
+      $cmd = $this->getCmd('info', $logicalId);
+      if (!is_object($cmd)) {
+        continue;
+      }
+      try {
+        $rawValue = $cmd->execCmd();
+      } catch (Exception $e) {
+        continue;
+      }
+      if (!is_string($rawValue) || $rawValue === '') {
+        continue;
+      }
+      $decoded = json_decode($rawValue, true);
+      if (!is_array($decoded)) {
+        continue;
+      }
+      foreach ($decoded as $usage) {
+        if (!is_array($usage)) {
+          continue;
+        }
+        $key = $this->buildUsageKey($usage);
+        if ($key === '') {
+          continue;
+        }
+        if (!isset($usageMap[$key])) {
+          $usageMap[$key] = array(
+            'key' => $key,
+            'id' => isset($usage['id']) ? $usage['id'] : '',
+            'nom' => isset($usage['nom']) ? $usage['nom'] : '',
+            'thematique' => isset($usage['thematique']) ? $usage['thematique'] : '',
+          );
+        }
+      }
+    }
+    if (empty($usageMap)) {
+      return array();
+    }
+    uasort($usageMap, function ($a, $b) {
+      $themeA = isset($a['thematique']) ? strtolower($a['thematique']) : '';
+      $themeB = isset($b['thematique']) ? strtolower($b['thematique']) : '';
+      if ($themeA === $themeB) {
+        return strcmp(isset($a['nom']) ? strtolower($a['nom']) : '', isset($b['nom']) ? strtolower($b['nom']) : '');
+      }
+      return strcmp($themeA, $themeB);
+    });
+    return array_values($usageMap);
+  }
+
   private function getCommonCommandDefinitions() {
     return array(
       'departement' => array(
@@ -663,11 +791,19 @@ class propluvia extends eqLogic {
           'aucune' => array('label' => __('Aucune restriction', __FILE__), 'value' => 0),
         );
 
-        $buildEditorial = function ($usages) use ($typeInfo) {
+        $enabledUsageKeys = $this->getEnabledUsageKeys();
+        $self = $this;
+        $buildEditorial = function ($usages) use ($typeInfo, $enabledUsageKeys, $self) {
           $messages = array();
           foreach ($usages as $usage) {
             if (!is_array($usage)) {
               continue;
+            }
+            $usageKey = $self->buildUsageKey($usage);
+            if (!empty($enabledUsageKeys)) {
+              if ($usageKey === '' || !in_array($usageKey, $enabledUsageKeys, true)) {
+                continue;
+              }
             }
             $shouldAdd = false;
             switch ($typeInfo) {
