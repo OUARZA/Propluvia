@@ -35,8 +35,13 @@ function propluvia_update() {
       config::save('cronHeure', $randHeure, 'propluvia');
     }
     config::save('captcha-warning', 1, 'propluvia');
+    message::add(
+      'propluvia',
+      __("Propluvia c'est fini !\nRetrouvez le nouveau plugin VigiEau sur le Market (actuellement en beta).\nMerci.\nMathieu", __FILE__)
+    );
   }
 
 // Fonction exécutée automatiquement après la suppression du plugin
 function propluvia_remove() {
 }
+
